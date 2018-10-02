@@ -74,7 +74,9 @@ int main(int argc, char* argv[])
 
 	int rank;
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-	//printf("Je suis rank %d\n", rank);
+	int world_size;
+	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+	printf("worldSize: %d\n", world_size);
 
 	
 
@@ -82,9 +84,11 @@ int main(int argc, char* argv[])
 	clock_t begin = clock();
 	// Faire le tp
 	
-	
-	//
-	
+	int token;
+	if (rank != 0)
+	{
+		MPI_Recv(&token, 1, MPI_INT, rank - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	   // printf("Process %d received token %d from process %d\n", rank, token, rank - 1);
 		int i = rank/8;
 		int j = rank%8;
 		for (int k = 1; k <= nbItterations; k++)
@@ -92,20 +96,24 @@ int main(int argc, char* argv[])
 			matrix[i][j] = matrix[i][j] + (i + j) * k;
 		}
 		printMatrix();
+	} 
+	else 
+	{
+		token = -1;
+	}
+	
+	MPI_Send(&token, 1, MPI_INT, (rank + 1) % world_size, 0, MPI_COMM_WORLD);
 
-		
-	 
-	 if(rank == 0 && token > nbItterations)
-	 {
-		MPI_Recv(&token, 1, MPI_INT, 63, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	//processus 0 reçois le message du dernier processus
+	if (rank == 0) 
+	{
+		MPI_Recv(&token, 1, MPI_INT, world_size - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		clock_t end = clock();
 		double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 		printMatrix();
 		printf("Time : %f\n", time_spent);
-	 }
-	 
-	//
-	
+	}
+//	
 	/*
 	if (rank == 0) {
 		for (int k = 1; k <= nbItterations; k++)
