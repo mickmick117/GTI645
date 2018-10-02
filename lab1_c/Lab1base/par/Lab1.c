@@ -32,7 +32,7 @@ void printMatrix()
 	}
 }
 
-void P1Parallele(int rank)
+void P1Parallele(int rank, int initValue, int nbItterations)
 {
 	int i = rank/8;
 	int j = rank%8;
@@ -41,6 +41,11 @@ void P1Parallele(int rank)
 	for (int k = 1; k <= nbItterations; k++)
 	{
 		matrix[i][j] = matrix[i][j] + (i + j) * k;
+	}
+	
+	if(rank =! 0)
+	{
+		MPI_Send(&matrix[i][j], 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 	}
 }
 
@@ -77,12 +82,11 @@ int main(int argc, char* argv[])
 	{
 		if (rank != 0)
 		{	
-			P1Parallele(rank);
-			MPI_Send(&matrix[i][j], 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+			P1Parallele(rank, initValue, nbItterations);
 		} 
 		else 
 		{
-			P1Parallele(rank);
+			P1Parallele(rank, initValue, nbItterations);
 			
 			for(int process=1; process < world_size; process++)
 			{
