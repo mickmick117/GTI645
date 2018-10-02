@@ -67,8 +67,6 @@ int main(int argc, char* argv[])
 	int nbProbleme = atoi(argv[1]);
 	int initValue = atoi(argv[2]);
 	int nbItterations = atoi(argv[3]);
-
-	initMatrixValues(initValue);
 	
 	MPI_Init(&argc, &argv);
 
@@ -99,6 +97,7 @@ int main(int argc, char* argv[])
 	} 
 	else 
 	{
+		initMatrixValues(initValue);
 		token = -1;
 	}
 	
