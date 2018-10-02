@@ -36,7 +36,7 @@ void P1Parallele(int rank, int initValue, int nbItterations)
 {
 	int i = rank/8;
 	int j = rank%8;
-	initMatrixValues(initValue);
+	
 	
 	for (int k = 1; k <= nbItterations; k++)
 	{
@@ -65,7 +65,8 @@ int main(int argc, char* argv[])
 	int nbProbleme = atoi(argv[1]);
 	int initValue = atoi(argv[2]);
 	int nbItterations = atoi(argv[3]);
-	
+	initMatrixValues(initValue);
+
 	MPI_Init(&argc, &argv);
 
 	int rank;
