@@ -38,6 +38,10 @@ int main(int argc, char* argv[])
 		printf("Le programme prend trois paramètres de lancement dans cet ordre (\" prog c v n \") :\nc = Choix du problème à exécuter (1 ou 2);\nv = La valeur initiale des éléments de la matrice\nn = Le nombre d’altérations.");
 		return 0;
 	}
+	
+	int nbProbleme = atoi(argv[1]);
+	int initValue = atoi(argv[2]);
+	int nbItterations = atoi(argv[3]);
 
 	MPI_Init(&argc, &argv);
 
@@ -45,26 +49,35 @@ int main(int argc, char* argv[])
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	//printf("Je suis rank %d\n", rank);
 
-	int nbProbleme = atoi(argv[1]);
-	int initValue = atoi(argv[2]);
-	int nbItterations = atoi(argv[3]);
+	
 
 	
 	clock_t begin = clock();
 	// Faire le tp
 	initMatrixValues(initValue);
-
-	for (int k = 1; k <= nbItterations; k++)
-	{
-		for (int i = 0; i < 8; i++)
+	if (rank == 0) {
+		for (int k = 1; k <= nbItterations; k++)
 		{
-			for (int j = 0; j < 8; j++)
+			for (int i = 0; i < 8; i++)
 			{
-				usleep(WAIT_TIME);
-				printf("rank %i working on element %i\n", rank, i);
-				matrix[i][j] = matrix[i][j] + (i + j) * k;
+				for (int j = 0; j < 8; j++)
+				{
+					MPI_Send(&k, 1, MPI_INT, j + (i*8), 0, MPI_COMM_WORLD);
+					usleep(WAIT_TIME);
+					printf("rank %i working on element %i\n", rank, i);
+					matrix[i][j] = matrix[i][j] + (i + j) * k;
+				}
 			}
 		}
+	}
+	
+	if(rank >= 0)
+	{
+		int token;
+		MPI_Recv(&token, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		int i = rank/8;
+		int j = rank%8;
+		matrix[i][j] = matrix[i][j] + (i + j) * token;
 	}
 
 	printMatrix();
