@@ -20,7 +20,7 @@ void initMatrixValues(int initValue)
 	}
 }
 
-void printMatrix(int ***matrix)
+void printMatrix()
 {
 	for (int i = 0; i < 8; i++)
 	{
@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
 	//processus 0 reçois le message du dernier processus
 	if (rank == 0) 
 	{
-		for(process=1; process < 64; process++)
+		for(int process=1; process < 64; process++)
 		{
 			int i = process/8;
 			int j = process%8;
