@@ -32,6 +32,31 @@ void printMatrix()
 	}
 }
 
+void P1Sequentiel(int initValue, int nbItterations)
+{
+	initMatrixValues(initValue);
+	if (rank == 0) {
+		for (int k = 1; k <= nbItterations; k++)
+		{
+			for (int i = 0; i < 8; i++)
+			{
+				for (int j = 0; j < 8; j++)
+				{
+					MPI_Send(&k, 1, MPI_INT, j + (i*8), 0, MPI_COMM_WORLD);
+					usleep(WAIT_TIME);
+					//printf("rank %i working on element %i\n", rank, i);
+					matrix[i][j] = matrix[i][j] + (i + j) * k;
+				}
+			}
+		}
+	}
+}
+
+void P2Sequentiel(int initValue, int nbItterations)
+{
+	
+}
+
 int main(int argc, char* argv[])
 {
 	if (argc != 4) {
@@ -65,7 +90,7 @@ int main(int argc, char* argv[])
 					MPI_Send(&k, 1, MPI_INT, j + (i*8), 0, MPI_COMM_WORLD);
 					usleep(WAIT_TIME);
 					//printf("rank %i working on element %i\n", rank, i);
-					matrix[i][j] = matrix[i][j] + (i + j) * k;
+					//matrix[i][j] = matrix[i][j] + (i + j) * k;
 				}
 			}
 		}
