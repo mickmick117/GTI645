@@ -64,28 +64,26 @@ int main(int argc, char* argv[])
 				{
 					MPI_Send(&k, 1, MPI_INT, j + (i*8), 0, MPI_COMM_WORLD);
 					usleep(WAIT_TIME);
-					printf("rank %i working on element %i\n", rank, i);
+					//printf("rank %i working on element %i\n", rank, i);
 					matrix[i][j] = matrix[i][j] + (i + j) * k;
 				}
 			}
 		}
 	}
 	
-	if(rank >= 0)
-	{
-		int token;
-		MPI_Recv(&token, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		int i = rank/8;
-		int j = rank%8;
-		matrix[i][j] = matrix[i][j] + (i + j) * token;
-	}
+	int token;
+	MPI_Recv(&token, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	int i = rank/8;
+	int j = rank%8;
+	matrix[i][j] = matrix[i][j] + (i + j) * token;
 
-	printMatrix();
+
 
 	// Un seul process doit faire le print.
 	if (rank == 0) {
 		clock_t end = clock();
 		double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+		printMatrix();
 		printf("Time : %f\n", time_spent);
 	}
 	
