@@ -79,10 +79,49 @@ int main(int argc, char* argv[])
 	
 	clock_t begin = clock();
 	// Faire le tp
-	initMatrixValues(initValue);
+	
+	
+	//
+	/*int token;
+	if(rank != 0)
+	{
+		MPI_Recv(&token, 1, MPI_INT, rank - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		int i = rank/8;
+		int j = rank%8;
+		matrix[i][j] = matrix[i][j] + (i + j) * token;
+		
+		if(rank == 63)
+		{
+			token = token+1;
+		}
+	 }
+	 else
+	 {
+		 token = 1;
+	 }
+	 
+	 MPI_Send(&token, 1, MPI_INT, (rank + 1), 0, MPI_COMM_WORLD);
+	 
+	 if(rank == 0 && token > nbItterations)
+	 {
+		MPI_Recv(&token, 1, MPI_INT, 63, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		clock_t end = clock();
+		double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+		printMatrix();
+		printf("Time : %f\n", time_spent);
+	 }*/
+	 
+	//
+	
+	
 	if (rank == 0) {
 		for (int k = 1; k <= nbItterations; k++)
 		{
+			if(k == 0)
+			{
+				initMatrixValues(initValue);
+			}
+			
 			for (int i = 0; i < 8; i++)
 			{
 				for (int j = 0; j < 8; j++)
@@ -95,14 +134,13 @@ int main(int argc, char* argv[])
 			}
 		}
 	}
-	
+
 	int token;
 	MPI_Recv(&token, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	int i = rank/8;
 	int j = rank%8;
 	matrix[i][j] = matrix[i][j] + (i + j) * token;
-
-
+	
 
 	// Un seul process doit faire le print.
 	if (rank == 0) {
