@@ -68,6 +68,8 @@ int main(int argc, char* argv[])
 	int initValue = atoi(argv[2]);
 	int nbItterations = atoi(argv[3]);
 
+	initMatrixValues(initValue);
+	
 	MPI_Init(&argc, &argv);
 
 	int rank;
@@ -82,25 +84,16 @@ int main(int argc, char* argv[])
 	
 	
 	//
-	/*int token;
-	if(rank != 0)
-	{
-		MPI_Recv(&token, 1, MPI_INT, rank - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	
 		int i = rank/8;
 		int j = rank%8;
-		matrix[i][j] = matrix[i][j] + (i + j) * token;
-		
-		if(rank == 63)
+		for (int k = 1; k <= nbItterations; k++)
 		{
-			token = token+1;
+			matrix[i][j] = matrix[i][j] + (i + j) * k;
 		}
-	 }
-	 else
-	 {
-		 token = 1;
-	 }
-	 
-	 MPI_Send(&token, 1, MPI_INT, (rank + 1), 0, MPI_COMM_WORLD);
+		printMatrix();
+
+		
 	 
 	 if(rank == 0 && token > nbItterations)
 	 {
@@ -109,11 +102,11 @@ int main(int argc, char* argv[])
 		double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 		printMatrix();
 		printf("Time : %f\n", time_spent);
-	 }*/
+	 }
 	 
 	//
 	
-	
+	/*
 	if (rank == 0) {
 		for (int k = 1; k <= nbItterations; k++)
 		{
@@ -149,7 +142,7 @@ int main(int argc, char* argv[])
 		printMatrix();
 		printf("Time : %f\n", time_spent);
 	}
-	
+	*/
 
 	MPI_Finalize();
 	return 0;
