@@ -32,7 +32,7 @@ void printMatrix()
 	}
 }
 
-void P1Sequentiel(int initValue, int nbItterations)
+/*void P1Sequentiel(int initValue, int nbItterations)
 {
 	initMatrixValues(initValue);
 	if (rank == 0) {
@@ -50,7 +50,7 @@ void P1Sequentiel(int initValue, int nbItterations)
 			}
 		}
 	}
-}
+}*/
 
 void P2Sequentiel(int initValue, int nbItterations)
 {
