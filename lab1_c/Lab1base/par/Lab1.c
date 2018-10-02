@@ -20,7 +20,7 @@ void initMatrixValues(int initValue)
 	}
 }
 
-void printMatrix()
+void printMatrix(int ***matrix)
 {
 	for (int i = 0; i < 8; i++)
 	{
@@ -57,6 +57,7 @@ void P2Sequentiel(int initValue, int nbItterations)
 	
 }
 
+
 int main(int argc, char* argv[])
 {
 	if (argc != 4) {
@@ -84,48 +85,52 @@ int main(int argc, char* argv[])
 	
 	int token;
 	if (rank != 0)
-	{
-		for(int i=0; i<8; i++)
-		{
-			for(int j=0; j<8; j++)
-			{
-				MPI_Recv(&matrix[i][j], 1, MPI_INT, rank - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			}
-		}
-	   // printf("Process %d received token %d from process %d\n", rank, token, rank - 1);
+	{		
 		int i = rank/8;
 		int j = rank%8;
+		initMatrixValues(initValue);
+		
 		for (int k = 1; k <= nbItterations; k++)
 		{
 			matrix[i][j] = matrix[i][j] + (i + j) * k;
 		}
-		//printMatrix();
+		MPI_Send(&matrix[i][j], 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 	} 
 	else 
 	{
 		initMatrixValues(initValue);
-		token = -1;
+		for (int k = 1; k <= nbItterations; k++)
+		{
+			matrix[0][0] = matrix[0][0] + (0 + 0) * k;
+		}
 	}
 	
-	for(int i=0; i<8; i++)
+	/*for(int i=0; i<8; i++)
 	{
 		for(int j=0; j<8; j++)
 		{
 			MPI_Send(&matrix[i][j], 1, MPI_INT, (rank + 1) % world_size, 0, MPI_COMM_WORLD);
 		}
-	}
+	}*/
 	
 
 	//processus 0 reçois le message du dernier processus
 	if (rank == 0) 
 	{
-		for(int i=0; i<8; i++)
+		for(process=1; process < 64; process++)
+		{
+			int i = process/8;
+			int j = process%8;
+			MPI_Recv(&matrix[i][j], 1, MPI_INT, process, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		}
+		
+	/*	for(int i=0; i<8; i++)
 		{
 			for(int j=0; j<8; j++)
 			{
 				MPI_Recv(&matrix[i][j], 1, MPI_INT, world_size - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			}
-		}		
+		}	*/	
 		clock_t end = clock();
 		double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 		printMatrix();
