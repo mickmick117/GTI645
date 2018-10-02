@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
 		{
 			matrix[i][j] = matrix[i][j] + (i + j) * k;
 		}
-		printMatrix();
+		//printMatrix();
 	} 
 	else 
 	{
@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
 		{
 			for(int j=0; j<8; j++)
 			{
-				MPI_Recv(&token, 1, MPI_INT, world_size - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+				MPI_Recv(&matrix[i][j], 1, MPI_INT, world_size - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			}
 		}		
 		clock_t end = clock();
