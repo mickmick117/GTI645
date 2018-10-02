@@ -32,27 +32,19 @@ void printMatrix()
 	}
 }
 
-/*void P1Sequentiel(int initValue, int nbItterations)
+void P1Parallele(int rank)
 {
+	int i = rank/8;
+	int j = rank%8;
 	initMatrixValues(initValue);
-	if (rank == 0) {
-		for (int k = 1; k <= nbItterations; k++)
-		{
-			for (int i = 0; i < 8; i++)
-			{
-				for (int j = 0; j < 8; j++)
-				{
-					MPI_Send(&k, 1, MPI_INT, j + (i*8), 0, MPI_COMM_WORLD);
-					usleep(WAIT_TIME);
-					//printf("rank %i working on element %i\n", rank, i);
-					matrix[i][j] = matrix[i][j] + (i + j) * k;
-				}
-			}
-		}
+	
+	for (int k = 1; k <= nbItterations; k++)
+	{
+		matrix[i][j] = matrix[i][j] + (i + j) * k;
 	}
-}*/
+}
 
-void P2Sequentiel(int initValue, int nbItterations)
+void P2Parallele(int rank)
 {
 	
 }
@@ -75,106 +67,41 @@ int main(int argc, char* argv[])
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	int world_size;
 	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
-	//printf("worldSize: %d\n", world_size);
 
-	
-
-	
 	clock_t begin = clock();
 	// Faire le tp
 	
 	int token;
-	if (rank != 0)
-	{		
-		int i = rank/8;
-		int j = rank%8;
-		initMatrixValues(initValue);
-		
-		for (int k = 1; k <= nbItterations; k++)
-		{
-			matrix[i][j] = matrix[i][j] + (i + j) * k;
-		}
-		MPI_Send(&matrix[i][j], 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-	} 
-	else 
-	{
-		initMatrixValues(initValue);
-		for (int k = 1; k <= nbItterations; k++)
-		{
-			matrix[0][0] = matrix[0][0] + (0 + 0) * k;
-		}
-	}
 	
-	/*for(int i=0; i<8; i++)
+	if(nbProbleme == 1)
 	{
-		for(int j=0; j<8; j++)
+		if (rank != 0)
+		{	
+			P1Parallele(rank);
+			MPI_Send(&matrix[i][j], 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+		} 
+		else 
 		{
-			MPI_Send(&matrix[i][j], 1, MPI_INT, (rank + 1) % world_size, 0, MPI_COMM_WORLD);
-		}
-	}*/
-	
-
-	//processus 0 reçois le message du dernier processus
-	if (rank == 0) 
-	{
-		for(int process=1; process < 64; process++)
-		{
-			int i = process/8;
-			int j = process%8;
-			MPI_Recv(&matrix[i][j], 1, MPI_INT, process, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		}
-		
-	/*	for(int i=0; i<8; i++)
-		{
-			for(int j=0; j<8; j++)
+			P1Parallele(rank);
+			
+			for(int process=1; process < world_size; process++)
 			{
-				MPI_Recv(&matrix[i][j], 1, MPI_INT, world_size - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			}
-		}	*/	
-		clock_t end = clock();
-		double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-		printMatrix();
-		printf("Time : %f\n", time_spent);
-	}
-//	
-	/*
-	if (rank == 0) {
-		for (int k = 1; k <= nbItterations; k++)
-		{
-			if(k == 0)
-			{
-				initMatrixValues(initValue);
+				int i = process/8;
+				int j = process%8;
+				MPI_Recv(&matrix[i][j], 1, MPI_INT, process, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			}
 			
-			for (int i = 0; i < 8; i++)
-			{
-				for (int j = 0; j < 8; j++)
-				{
-					MPI_Send(&k, 1, MPI_INT, j + (i*8), 0, MPI_COMM_WORLD);
-					usleep(WAIT_TIME);
-					//printf("rank %i working on element %i\n", rank, i);
-					//matrix[i][j] = matrix[i][j] + (i + j) * k;
-				}
-			}
-		}
+			clock_t end = clock();
+			double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+			printMatrix();
+			printf("Time : %f\n", time_spent);
+		}	
 	}
-
-	int token;
-	MPI_Recv(&token, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	int i = rank/8;
-	int j = rank%8;
-	matrix[i][j] = matrix[i][j] + (i + j) * token;
+	else if(nbProbleme == 2)
+	{
+		
+	}
 	
-
-	// Un seul process doit faire le print.
-	if (rank == 0) {
-		clock_t end = clock();
-		double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-		printMatrix();
-		printf("Time : %f\n", time_spent);
-	}
-	*/
-
 	MPI_Finalize();
 	return 0;
 }
