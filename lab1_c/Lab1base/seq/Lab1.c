@@ -7,14 +7,77 @@
 #define WAIT_TIME 1000
 
 
+int matrix[8][8];
 
 
-void P1Sequentiel(int initValue, int nbItterations) {
+void initMatrixValues(int initValue)
+{
 	for (int i = 0; i < 8; i++)
+	{
 		for (int j = 0; j < 8; j++)
-			usleep(WAIT_TIME);
+		{
+			matrix[i][j] = initValue;
+		}
+	}
 }
 
+void printMatrix()
+{
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			printf("%d,",matrix[i][j]);
+		}
+		printf("\n");
+	}
+}
+
+void P1Sequentiel(int initValue, int nbItterations)
+{
+	initMatrixValues(initValue);
+
+	for (int k = 1; k <= nbItterations; k++)
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				usleep(WAIT_TIME);
+				matrix[i][j] = matrix[i][j] + (i + j) * k;
+			}
+		}
+	}
+
+	printMatrix();
+}
+
+void P2Sequentiel(int initValue, int nbItterations)
+{
+	initMatrixValues(initValue);
+
+	for (int k = 1; k <= nbItterations; k++)
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				usleep(WAIT_TIME);
+
+				if (j == 0)
+				{
+					matrix[i][j] = matrix[i][j] + (i*k);
+				}
+				else
+				{
+					matrix[i][j] = matrix[i][j] + matrix[i][j - 1] * k;
+				}
+			}
+		}
+	}
+	
+	printMatrix();
+}
 
 int main(int argc, char* argv[])
 {
@@ -32,6 +95,8 @@ int main(int argc, char* argv[])
 	// si rpobleme 1 faire 1 sinon faire 2
 	if(nbProbleme == 1)
 		P1Sequentiel(initValue, nbItterations);
+	else
+		P2Sequentiel(initValue, nbItterations);
 	
 	clock_t end = clock();
 	double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
@@ -39,4 +104,5 @@ int main(int argc, char* argv[])
 	
 	return 0;
 }
+
 
