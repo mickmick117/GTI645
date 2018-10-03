@@ -32,7 +32,7 @@ void printMatrix()
 	}
 }
 
-void P1Parallele(int rank, int initValue, int nbItterations)
+void P1Parallele(int rank, int nbItterations)
 {
 	int i = rank/8;
 	int j = rank%8;
@@ -49,11 +49,10 @@ void P1Parallele(int rank, int initValue, int nbItterations)
 	}
 }
 
-void P2Parallele(int rank, initValue, nbItterations)
+void P2Parallele(int rank, int nbItterations)
 {
 	int i = rank/8;
 	int j = rank%8;
-	initMatrixValues(initValue);
 	
 	if (j == 0)
 	{
@@ -107,11 +106,11 @@ int main(int argc, char* argv[])
 	{
 		if (rank != 0)
 		{	
-			P1Parallele(rank, initValue, nbItterations);
+			P1Parallele(rank, nbItterations);
 		} 
 		else 
 		{
-			P1Parallele(rank, initValue, nbItterations);
+			P1Parallele(rank, nbItterations);
 			
 			for(int process=1; process < world_size; process++)
 			{
@@ -127,15 +126,14 @@ int main(int argc, char* argv[])
 		}	
 	}
 	else if(nbProbleme == 2)
-	{
-		
+	{		
 		if (rank != 0)
 		{	
-			P2Parallele(rank, initValue, nbItterations);
+			P2Parallele(rank, nbItterations);
 		} 
 		else 
 		{
-			P2Parallele(rank, initValue, nbItterations);
+			P2Parallele(rank, nbItterations);
 			
 			for(int process=1; process < world_size; process++)
 			{
@@ -149,33 +147,9 @@ int main(int argc, char* argv[])
 			printMatrix();
 			printf("Time : %f\n", time_spent);
 		}	
-		
-		
-	/*	initMatrixValues(initValue);
-
-	for (int k = 1; k <= nbItterations; k++)
-	{
-		for (int i = 0; i < 8; i++)
-		{
-			for (int j = 0; j < 8; j++)
-			{
-				usleep(WAIT_TIME);
-
-				if (j == 0)
-				{
-					matrix[i][j] = matrix[i][j] + (i*k);
-				}
-				else
-				{
-					matrix[i][j] = matrix[i][j] + matrix[i][j - 1] * k;
-				}
-			}
-		}*/
 	}
 	
-	printMatrix();
-	}
-	
+	printMatrix();	
 	MPI_Finalize();
 	return 0;
 }
