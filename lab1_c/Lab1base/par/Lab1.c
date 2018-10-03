@@ -105,8 +105,6 @@ int main(int argc, char* argv[])
 	clock_t begin = clock();
 	// Faire le tp
 	
-	int token;
-	
 	if(nbProbleme == 1)
 	{
 		if (rank != 0)
