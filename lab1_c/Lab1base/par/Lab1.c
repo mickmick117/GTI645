@@ -149,7 +149,6 @@ int main(int argc, char* argv[])
 		}	
 	}
 	
-	printMatrix();	
 	MPI_Finalize();
 	return 0;
 }
