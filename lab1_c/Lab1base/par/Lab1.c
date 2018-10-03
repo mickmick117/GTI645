@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
 	{
 		if (rank != 0)
 		{	
-			P1Parallele(rank, nbItterations);
+			P1Parallele(rank, nbItterations, initValue);
 		} 
 		else 
 		{
@@ -138,7 +138,7 @@ int main(int argc, char* argv[])
 		} 
 		else 
 		{
-			P2Parallele(rank, nbItterations);
+			P2Parallele(rank, nbItterations, initValue);
 			
 			for(int process=1; process < world_size; process++)
 			{
