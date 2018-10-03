@@ -47,6 +47,10 @@ void P1Parallele(int rank, int nbItterations, int initValue)
 	{
 		MPI_Send(&initValue, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 	}
+	else
+	{
+		matrix[i][j] = initValue;
+	}
 }
 
 void P2Parallele(int rank, int nbItterations, int initValue)
@@ -79,6 +83,10 @@ void P2Parallele(int rank, int nbItterations, int initValue)
 	if(rank =! 0)
 	{
 		MPI_Send(&initValue, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+	}
+	else
+	{
+		matrix[i][j] = initValue;
 	}
 }
 
