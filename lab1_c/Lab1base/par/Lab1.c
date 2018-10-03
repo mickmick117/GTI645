@@ -43,7 +43,7 @@ void P1Parallele(int rank, int nbItterations, int initValue)
 		initValue = initValue + (i + j) * k;
 	}
 	
-	if(rank =! 0)
+	if(rank != 0)
 	{
 		MPI_Send(&initValue, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 	}
@@ -80,7 +80,7 @@ void P2Parallele(int rank, int nbItterations, int initValue)
 		}
 	}
 	
-	if(rank =! 0)
+	if(rank != 0)
 	{
 		MPI_Send(&initValue, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 	}
