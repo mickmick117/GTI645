@@ -68,6 +68,10 @@ void P2Parallele(int rank, int nbItterations)
 		{
 			MPI_Recv(&matrix[i][j-1], 1, MPI_INT, rank-1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			matrix[i][j] = matrix[i][j] + matrix[i][j - 1] * k;
+			if(j != 8-1)
+			{
+				MPI_Send(&matrix[i][j], 1, MPI_INT, rank+1, 0, MPI_COMM_WORLD);
+			}
 		}
 	}
 	
