@@ -32,7 +32,7 @@ void printMatrix()
 	}
 }
 
-void P1Parallele(int rank, int nbItterations)
+void P1Parallele(int rank, int nbItterations, int initValue)
 {
 	int i = rank/8;
 	int j = rank%8;
@@ -40,16 +40,16 @@ void P1Parallele(int rank, int nbItterations)
 	
 	for (int k = 1; k <= nbItterations; k++)
 	{
-		matrix[i][j] = matrix[i][j] + (i + j) * k;
+		initValue = initValue + (i + j) * k;
 	}
 	
 	if(rank =! 0)
 	{
-		MPI_Send(&matrix[i][j], 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+		MPI_Send(&initValue, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 	}
 }
 
-void P2Parallele(int rank, int nbItterations)
+void P2Parallele(int rank, int nbItterations, int initValue)
 {
 	int i = rank/8;
 	int j = rank%8;
@@ -58,26 +58,27 @@ void P2Parallele(int rank, int nbItterations)
 	{
 		for (int k = 1; k <= nbItterations; k++)
 		{
-			matrix[i][j] = matrix[i][j] + (i*k);
-			MPI_Send(&matrix[i][j], 1, MPI_INT, rank+1, 0, MPI_COMM_WORLD);
+			initValue = initValue + (i*k);
+			MPI_Send(&initValue, 1, MPI_INT, rank+1, 0, MPI_COMM_WORLD);
 		}
 	}
 	else
 	{
+		int previousValue;
 		for (int k = 1; k <= nbItterations; k++)
 		{
-			MPI_Recv(&matrix[i][j-1], 1, MPI_INT, rank-1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			matrix[i][j] = matrix[i][j] + matrix[i][j - 1] * k;
+			MPI_Recv(&previousValue, 1, MPI_INT, rank-1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			initValue = initValue + previousValue * k;
 			if(j != 8-1)
 			{
-				MPI_Send(&matrix[i][j], 1, MPI_INT, rank+1, 0, MPI_COMM_WORLD);
+				MPI_Send(&initValue, 1, MPI_INT, rank+1, 0, MPI_COMM_WORLD);
 			}
 		}
 	}
 	
 	if(rank =! 0)
 	{
-		MPI_Send(&matrix[i][j], 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+		MPI_Send(&initValue, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 	}
 }
 
@@ -92,7 +93,7 @@ int main(int argc, char* argv[])
 	int nbProbleme = atoi(argv[1]);
 	int initValue = atoi(argv[2]);
 	int nbItterations = atoi(argv[3]);
-	initMatrixValues(initValue);
+	//initMatrixValues(initValue);
 
 	MPI_Init(&argc, &argv);
 
@@ -114,7 +115,7 @@ int main(int argc, char* argv[])
 		} 
 		else 
 		{
-			P1Parallele(rank, nbItterations);
+			P1Parallele(rank, nbItterations, initValue);
 			
 			for(int process=1; process < world_size; process++)
 			{
@@ -133,7 +134,7 @@ int main(int argc, char* argv[])
 	{		
 		if (rank != 0)
 		{	
-			P2Parallele(rank, nbItterations);
+			P2Parallele(rank, nbItterations, initValue);
 		} 
 		else 
 		{
