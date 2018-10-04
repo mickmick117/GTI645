@@ -140,7 +140,8 @@ int main(int argc, char* argv[])
 			//double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 			printMatrix();
 			//printf("Time : %f\n", time_spent);
-			printf("Time : %f\n", end.tv_nsec - begin.tv_nsec);
+			printf("%ld.%09ld\n", (long)(end.tv_sec - begin.tv_sec), end.tv_nsec - begin.tv_nsec);
+			//printf("Time : %f\n", end.tv_nsec - begin.tv_nsec);
 
 		}	
 	}
@@ -165,7 +166,8 @@ int main(int argc, char* argv[])
 			clock_gettime(CLOCK_REALTIME, &end);
 			//double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 			printMatrix();
-			printf("Time : %f\n", end.tv_nsec - begin.tv_nsec);
+			printf("%ld.%09ld\n", (long)(end.tv_sec - begin.tv_sec), end.tv_nsec - begin.tv_nsec);
+			//printf("Time : %f\n", end.tv_nsec - begin.tv_nsec);
 		}	
 	}
 	
