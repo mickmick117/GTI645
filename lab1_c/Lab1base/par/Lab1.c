@@ -137,9 +137,11 @@ int main(int argc, char* argv[])
 			
 			//clock_t end = clock();
 			clock_gettime(CLOCK_REALTIME, &end);
-			double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+			//double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 			printMatrix();
-			printf("Time : %f\n", time_spent);
+			//printf("Time : %f\n", time_spent);
+			printf("Time : %f\n", end.tv_nsec - begin.tv_nsec);
+
 		}	
 	}
 	else if(nbProbleme == 2)
