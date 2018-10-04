@@ -40,6 +40,7 @@ void P1Parallele(int rank, int nbItterations, int initValue)
 	
 	for (int k = 1; k <= nbItterations; k++)
 	{
+		//usleep(WAIT_TIME);
 		initValue = initValue + (i + j) * k;
 	}
 	
@@ -62,6 +63,7 @@ void P2Parallele(int rank, int nbItterations, int initValue)
 	{
 		for (int k = 1; k <= nbItterations; k++)
 		{
+			//usleep(WAIT_TIME);
 			initValue = initValue + (i*k);
 			MPI_Send(&initValue, 1, MPI_INT, rank+1, 0, MPI_COMM_WORLD);
 		}
@@ -72,6 +74,7 @@ void P2Parallele(int rank, int nbItterations, int initValue)
 		for (int k = 1; k <= nbItterations; k++)
 		{
 			MPI_Recv(&previousValue, 1, MPI_INT, rank-1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			//usleep(WAIT_TIME);
 			initValue = initValue + previousValue * k;
 			if(j != 8-1)
 			{
@@ -101,7 +104,8 @@ int main(int argc, char* argv[])
 	int nbProbleme = atoi(argv[1]);
 	int initValue = atoi(argv[2]);
 	int nbItterations = atoi(argv[3]);
-	//initMatrixValues(initValue);
+	struct timespec begin;
+	struct timespec end;
 
 	MPI_Init(&argc, &argv);
 
@@ -110,7 +114,8 @@ int main(int argc, char* argv[])
 	int world_size;
 	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
-	clock_t begin = clock();
+	//clock_t begin = clock();
+	clock_gettime(CLOCK_REALTIME, &begin);
 	// Faire le tp
 	
 	if(nbProbleme == 1)
@@ -130,7 +135,8 @@ int main(int argc, char* argv[])
 				MPI_Recv(&matrix[i][j], 1, MPI_INT, process, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			}
 			
-			clock_t end = clock();
+			//clock_t end = clock();
+			clock_gettime(CLOCK_REALTIME, &end);
 			double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 			printMatrix();
 			printf("Time : %f\n", time_spent);
@@ -153,10 +159,11 @@ int main(int argc, char* argv[])
 				MPI_Recv(&matrix[i][j], 1, MPI_INT, process, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			}
 			
-			clock_t end = clock();
-			double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+			//clock_t end = clock();
+			clock_gettime(CLOCK_REALTIME, &end);
+			//double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 			printMatrix();
-			printf("Time : %f\n", time_spent);
+			printf("Time : %f\n", end.tv_nsec - begin.tv_nsec);
 		}	
 	}
 	
