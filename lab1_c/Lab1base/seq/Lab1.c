@@ -48,8 +48,6 @@ void P1Sequentiel(int initValue, int nbItterations)
 			}
 		}
 	}
-
-	printMatrix();
 }
 
 void P2Sequentiel(int initValue, int nbItterations)
@@ -76,7 +74,6 @@ void P2Sequentiel(int initValue, int nbItterations)
 		}
 	}
 	
-	printMatrix();
 }
 
 int main(int argc, char* argv[])
@@ -89,8 +86,12 @@ int main(int argc, char* argv[])
 	int nbProbleme = atoi(argv[1]);
 	int initValue = atoi(argv[2]);
 	int nbItterations = atoi(argv[3]);
+	struct timespec begin;
+	struct timespec end;
 
-	clock_t begin = clock();
+	//clock_t begin = clock();
+	clock_gettime(CLOCK_REALTIME, &begin);
+
 	
 	// si rpobleme 1 faire 1 sinon faire 2
 	if(nbProbleme == 1)
@@ -98,9 +99,13 @@ int main(int argc, char* argv[])
 	else
 		P2Sequentiel(initValue, nbItterations);
 	
-	clock_t end = clock();
+	clock_gettime(CLOCK_REALTIME, &end);
+	printMatrix();
+	printf("%ld.%09ld\n", (long)(end.tv_sec - begin.tv_sec), end.tv_nsec - begin.tv_nsec);
+	
+	/*clock_t end = clock();
 	double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-	printf("Time : %f\n", time_spent);
+	printf("Time : %f\n", time_spent);*/
 	
 	return 0;
 }
