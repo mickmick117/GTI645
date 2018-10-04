@@ -40,7 +40,7 @@ void P1Parallele(int rank, int nbItterations, int initValue)
 	
 	for (int k = 1; k <= nbItterations; k++)
 	{
-		//usleep(WAIT_TIME);
+		usleep(WAIT_TIME);
 		initValue = initValue + (i + j) * k;
 	}
 	
@@ -63,7 +63,7 @@ void P2Parallele(int rank, int nbItterations, int initValue)
 	{
 		for (int k = 1; k <= nbItterations; k++)
 		{
-			//usleep(WAIT_TIME);
+			usleep(WAIT_TIME);
 			initValue = initValue + (i*k);
 			MPI_Send(&initValue, 1, MPI_INT, rank+1, 0, MPI_COMM_WORLD);
 		}
@@ -74,7 +74,7 @@ void P2Parallele(int rank, int nbItterations, int initValue)
 		for (int k = 1; k <= nbItterations; k++)
 		{
 			MPI_Recv(&previousValue, 1, MPI_INT, rank-1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			//usleep(WAIT_TIME);
+			usleep(WAIT_TIME);
 			initValue = initValue + previousValue * k;
 			if(j != 8-1)
 			{
