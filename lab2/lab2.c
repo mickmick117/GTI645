@@ -13,9 +13,12 @@ int matrix [12][12];
 
 void printMatrix()
 {
-	for (int i = 0; i < 8; i++)
+	printf("\n");
+	printf("\n");
+	
+	for (int i = 0; i < row; i++)
 	{
-		for (int j = 0; j < 8; j++)
+		for (int j = 0; j < column; j++)
 		{
 			printf("%d,",matrix[i][j]);
 		}
