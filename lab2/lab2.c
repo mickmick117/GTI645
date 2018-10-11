@@ -56,7 +56,7 @@ void probleme2Seq(int initValue, int iteration)
 		{
 			for(int i=0; i < row; i++)
 			{
-				for(int j=column; j > 0 ; j--)
+				for(int j=(column-1); j >= 0 ; j--)
 				{
 					usleep(WAIT_TIME);
 					
@@ -65,7 +65,7 @@ void probleme2Seq(int initValue, int iteration)
 						setMatrixValue(i,j, initValue);
 					}
 					
-					if(j == column)
+					if(j == (column-1))
 					{
 						setMatrixValue(i,j, matrix[i][j] + i);
 					}
