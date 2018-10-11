@@ -11,35 +11,45 @@ const int row = 12;
 const int column = 12;
 int matrix [12][12];
 
+void printMatrix()
+{
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			printf("%d,",matrix[i][j]);
+		}
+		printf("\n");
+	}
+}
+
 void setMatrixValue(int i, int j, int value)
 {
 	matrix[i][j] = value;
 }
 
-void probleme1Seq(int prob, int initValue, int iteration) 
+void probleme1Seq(int initValue, int iteration) 
 {
-	
-	if(prob == 1)
+	for(int k=1; k <= iteration; k++)
 	{
-		for(int k=1; k <= iteration; k++)
+		for(int i=0; i < row; i++)
 		{
-			for(int i=0; i < row; i++)
+			for(int j=0; j < column; j++)
 			{
-				for(int j=0; j < column; j++)
+				usleep(WAIT_TIME);
+				if(k == 1)
 				{
-					usleep(WAIT_TIME);
-					if(k == 1)
-					{
-						setMatrixValue(i,j, initValue);
-					}
-					setMatrixValue(i,j, matrix[i][j] + (i + j));				
+					setMatrixValue(i,j, initValue);
 				}
+				setMatrixValue(i,j, matrix[i][j] + (i + j));				
 			}
 		}
 	}
-	else if (prob == 2)
-	{
-		for(int k=1; k <= iteration; k++)
+}
+
+void probleme2Seq(int initValue, int iteration)
+{
+	for(int k=1; k <= iteration; k++)
 		{
 			for(int i=0; i < row; i++)
 			{
@@ -63,10 +73,9 @@ void probleme1Seq(int prob, int initValue, int iteration)
 				}
 			}
 		}
-	}
 }
 
-void probleme1Par(int prob, int initValue, int iteration) 
+void probleme1Par(int initValue, int iteration) 
 {
 }
 
@@ -99,7 +108,12 @@ int main(int argc, char const *argv[])
 	
 	//Sequentiel
 	clock_gettime(CLOCK_REALTIME, &requestStart);
-	probleme1Seq(p, v, n);
+	
+	if(p == 1)
+		probleme1Seq(v, n);
+	else
+		probleme2Seq(v, n);
+	
 	clock_gettime(CLOCK_REALTIME, &requestEnd);
 	tempExecutionSequentiel = (requestEnd.tv_sec - requestStart.tv_sec) + (requestEnd.tv_nsec - requestStart.tv_nsec) / BILLION;
     
@@ -111,7 +125,7 @@ int main(int argc, char const *argv[])
 	tempExecutionParallele = (requestEnd.tv_sec - requestStart.tv_sec) + (requestEnd.tv_nsec - requestStart.tv_nsec) / BILLION;
     */
 	
-
+	printMatrix();
     printf("\nDurée d'exécution séquentiel: %f seconde(s)", tempExecutionSequentiel);
   //  printf("\nDurée d'exécution parallèle: %f seconde(s)", tempExecutionParallele);
   //  printf("\nNombre de thread: %d", omp_get_max_threads());
