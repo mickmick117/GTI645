@@ -80,6 +80,12 @@ void probleme2Seq(int initValue, int iteration)
 
 void probleme1Par(int initValue, int iteration) 
 {
+	
+}
+
+void probleme2Par(int initValue, int iteration) 
+{
+	
 }
 
 int main(int argc, char const *argv[])
@@ -122,16 +128,21 @@ int main(int argc, char const *argv[])
     
 	
 	//Parallele
-	/*clock_gettime(CLOCK_REALTIME, &requestStart);
-	probleme1Par();
+	clock_gettime(CLOCK_REALTIME, &requestStart);
+	
+	if(p == 1)
+		probleme1Par(v, n);
+	else
+		probleme2Par(v, n);
+	
 	clock_gettime(CLOCK_REALTIME, &requestEnd);
 	tempExecutionParallele = (requestEnd.tv_sec - requestStart.tv_sec) + (requestEnd.tv_nsec - requestStart.tv_nsec) / BILLION;
-    */
+    
 	
 	printMatrix();
     printf("\nDurée d'exécution séquentiel: %f seconde(s)", tempExecutionSequentiel);
-  //  printf("\nDurée d'exécution parallèle: %f seconde(s)", tempExecutionParallele);
-  //  printf("\nNombre de thread: %d", omp_get_max_threads());
+    printf("\nDurée d'exécution parallèle: %f seconde(s)", tempExecutionParallele);
+    printf("\nNombre de thread: %d", omp_get_max_threads());
     printf("\nAccélération: %f", 0.0); // TODO mettre un beeau calcule pour donner la reponse 
     printf("\nEfficacité: %f\n", 0.0); // TODO mettre un beeau calcule pour donner la reponse
 
