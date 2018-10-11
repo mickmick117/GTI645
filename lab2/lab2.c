@@ -9,7 +9,7 @@
 
 const int row = 12;
 const int column = 12;
-int matrix [row][column];
+int matrix [12][12];
 
 void setMatrixValue(int i, int j, int value)
 {
