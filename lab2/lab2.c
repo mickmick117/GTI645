@@ -178,10 +178,10 @@ int main(int argc, char const *argv[])
 	//Sequentiel
 	clock_gettime(CLOCK_REALTIME, &requestStart);
 	
-	/*if(p == 1)
+	if(p == 1)
 		probleme1Seq(v, n);
 	else
-		probleme2Seq(v, n);*/
+		probleme2Seq(v, n);
 	
 	clock_gettime(CLOCK_REALTIME, &requestEnd);
 	tempExecutionSequentiel = (requestEnd.tv_sec - requestStart.tv_sec) + (requestEnd.tv_nsec - requestStart.tv_nsec) / BILLION;
