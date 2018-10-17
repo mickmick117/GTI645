@@ -83,14 +83,17 @@ void probleme1Par(int initValue, int iteration)
 {
 	int nbElementsEach = (row * column) / nbThread;
 	int nbThreadOneElementMore = (row * column) % nbThread;
-	
+	printf("1 \n");
 	#pragma omp parallel private(initValue, nbElementsEach, nbThreadOneElementMore)
 	{
+		printf("2 \n");
 		for(int k=1; k <= iteration; k++)
 		{
+			printf("3 \n");
 			#pragma omp for
 			for(int thread= 0; thread < nbThread; thread++)
 			{
+				printf("4 \n");
 				if(thread >= nbThreadOneElementMore)
 				{
 					nbElementsEach++;
@@ -98,6 +101,7 @@ void probleme1Par(int initValue, int iteration)
 				
 				for(int element = 0; element > nbElementsEach; element++)
 				{
+					printf("5 \n");
 					usleep(WAIT_TIME);		
 					
 					int index = thread + (element*nbThread);
