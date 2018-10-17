@@ -12,6 +12,17 @@ const int column = 12;
 const int nbThread = 64;
 int matrix [12][12];
 
+void initMatrixValues(int initValue)
+{
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < column; j++)
+		{
+			matrix[i][j] = initValue;
+		}
+	}
+}
+
 void printMatrix()
 {
 	printf("\n");
@@ -83,8 +94,9 @@ void probleme1Par(int initValue, int iteration)
 {
 	int nbElementsEach = (row * column) / nbThread;
 	int nbThreadOneElementMore = (row * column) % nbThread;
+	initMatrixValues(initValue)
 	//printf("1 \n");
-	#pragma omp parallel private(initValue, nbElementsEach, nbThreadOneElementMore)
+	#pragma omp parallel private(nbElementsEach, nbThreadOneElementMore)
 	{
 		//printf("2 \n");
 		for(int k=1; k <= iteration; k++)
@@ -109,10 +121,7 @@ void probleme1Par(int initValue, int iteration)
 					printf("\n");
 					int i = index/row;
 					int j = index%column;
-					if(k == 1)
-					{
-						setMatrixValue(i,j, initValue);
-					}
+					
 					setMatrixValue(i,j, matrix[i][j] + (i + j));	
 				}				
 			}
