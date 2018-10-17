@@ -131,7 +131,7 @@ void probleme2Par(int initValue, int iteration)
 		#pragma omp parallel for
 		for(int i= 0; i < row; i++)
 		{			
-			for(int j = 0; j < column; j++)
+			for(int j=(column-1); j >= 0 ; j--)
 			{
 				usleep(WAIT_TIME);		
 				
