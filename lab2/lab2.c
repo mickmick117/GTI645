@@ -92,16 +92,17 @@ void probleme2Seq(int initValue, int iteration)
 
 void probleme1Par(int initValue, int iteration) 
 {
-	int nbElementsEach = (row * column) / nbThread;
-	int nbThreadOneElementMore = (row * column) % nbThread;
 	initMatrixValues(initValue);
 	
 	
 	for(int k=1; k <= iteration; k++)
 	{		
-		#pragma omp parallel for private (nbElementsEach, nbThreadOneElementMore)
+		#pragma omp parallel for
 		for(int thread= 0; thread < nbThread; thread++)
-		{			
+		{
+			int nbElementsEach = (row * column) / nbThread;
+			int nbThreadOneElementMore = (row * column) % nbThread;
+			
 			if(thread < nbThreadOneElementMore)
 			{
 				nbElementsEach++;
@@ -112,8 +113,6 @@ void probleme1Par(int initValue, int iteration)
 				usleep(WAIT_TIME);		
 				
 				int index = thread + (element*nbThread);
-				printf("%d,",index);
-				printf("\n");
 				int i = index/row;
 				int j = index%column;
 				
@@ -125,32 +124,16 @@ void probleme1Par(int initValue, int iteration)
 
 void probleme2Par(int initValue, int iteration) 
 {
-/*	int nbElementsEach = (row * column) / nbThread;
-	int nbThreadOneElementMore = (row * column) % nbThread;
+	initMatrixValues(initValue);
 	
-	#pragma omp parallel private(initValue, nbElementsEach, nbThreadOneElementMore)
 	for(int k=1; k <= iteration; k++)
 	{
-		#pragma omp for
-		for(int thread= 0; i < nbThread; i++)
-		{
-			if(thread >= nbThreadOneElementMore)
-			{
-				nbElementsEach++;
-			}
-			
-			for(int element = 0; element > nbElementsEach; element++)
+		#pragma omp parallel for
+		for(int i= 0; i < row; i++)
+		{			
+			for(int j = 0; j < column; element++)
 			{
 				usleep(WAIT_TIME);		
-				
-				int index = thread + (element*nbThread);
-				int i = index/row;
-				int j = column - (index%column);
-				
-				if(k == 1)
-				{
-					setMatrixValue(i,j, initValue);
-				}
 				
 				if(j == (column-1))
 				{
@@ -162,7 +145,7 @@ void probleme2Par(int initValue, int iteration)
 				}	
 			}
 		}
-	}*/
+	}
 }
 
 int main(int argc, char const *argv[])
@@ -195,10 +178,10 @@ int main(int argc, char const *argv[])
 	//Sequentiel
 	clock_gettime(CLOCK_REALTIME, &requestStart);
 	
-	if(p == 1)
+	/*if(p == 1)
 		probleme1Seq(v, n);
 	else
-		probleme2Seq(v, n);
+		probleme2Seq(v, n);*/
 	
 	clock_gettime(CLOCK_REALTIME, &requestEnd);
 	tempExecutionSequentiel = (requestEnd.tv_sec - requestStart.tv_sec) + (requestEnd.tv_nsec - requestStart.tv_nsec) / BILLION;
