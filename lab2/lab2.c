@@ -196,10 +196,10 @@ int main(int argc, char const *argv[])
 	//Sequentiel
 	clock_gettime(CLOCK_REALTIME, &requestStart);
 	
-	/*if(p == 1)
+	if(p == 1)
 		probleme1Seq(v, n);
 	else
-		probleme2Seq(v, n);*/
+		probleme2Seq(v, n);
 	
 	clock_gettime(CLOCK_REALTIME, &requestEnd);
 	tempExecutionSequentiel = (requestEnd.tv_sec - requestStart.tv_sec) + (requestEnd.tv_nsec - requestStart.tv_nsec) / BILLION;
@@ -221,8 +221,8 @@ int main(int argc, char const *argv[])
     printf("\nDurée d'exécution séquentiel: %f seconde(s)", tempExecutionSequentiel);
     printf("\nDurée d'exécution parallèle: %f seconde(s)", tempExecutionParallele);
     printf("\nNombre de thread: %d", omp_get_max_threads());
-    printf("\nAccélération: %f", 0.0); // TODO mettre un beeau calcule pour donner la reponse 
-    printf("\nEfficacité: %f\n", 0.0); // TODO mettre un beeau calcule pour donner la reponse
+    printf("\nAccélération: %f", tempExecutionSequentiel - tempExecutionParallele); // TODO mettre un beeau calcule pour donner la reponse 
+    printf("\nEfficacité: %f\n", tempExecutionSequentiel/tempExecutionParallele); // TODO mettre un beeau calcule pour donner la reponse
 
     return 0;
 }
