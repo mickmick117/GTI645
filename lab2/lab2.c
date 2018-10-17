@@ -92,17 +92,16 @@ void probleme2Seq(int initValue, int iteration)
 
 void probleme1Par(int initValue, int iteration) 
 {
+	int nbElementsEach = (row * column) / nbThread;
+	int nbThreadOneElementMore = (row * column) % nbThread;
 	initMatrixValues(initValue);
 	
 	
 	for(int k=1; k <= iteration; k++)
 	{		
-		#pragma omp parallel for
+		#pragma omp parallel for private (nbElementsEach, nbThreadOneElementMore)
 		for(int thread= 0; thread < nbThread; thread++)
-		{
-			int nbElementsEach = (row * column) / nbThread;
-			int nbThreadOneElementMore = (row * column) % nbThread;
-			
+		{			
 			if(thread < nbThreadOneElementMore)
 			{
 				nbElementsEach++;
