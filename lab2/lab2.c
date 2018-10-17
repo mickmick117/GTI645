@@ -9,6 +9,7 @@
 
 const int row = 12;
 const int column = 12;
+const int nbThread = 64;
 int matrix [12][12];
 
 void printMatrix()
@@ -53,39 +54,106 @@ void probleme1Seq(int initValue, int iteration)
 void probleme2Seq(int initValue, int iteration)
 {
 	for(int k=1; k <= iteration; k++)
+	{
+		for(int i=0; i < row; i++)
 		{
-			for(int i=0; i < row; i++)
+			for(int j=(column-1); j >= 0 ; j--)
 			{
-				for(int j=(column-1); j >= 0 ; j--)
+				usleep(WAIT_TIME);
+				
+				if(k == 1)
 				{
-					usleep(WAIT_TIME);
-					
-					if(k == 1)
-					{
-						setMatrixValue(i,j, initValue);
-					}
-					
-					if(j == (column-1))
-					{
-						setMatrixValue(i,j, matrix[i][j] + i);
-					}
-					else
-					{
-						setMatrixValue(i,j, matrix[i][j] + matrix[i][j+1]);
-					}				
+					setMatrixValue(i,j, initValue);
 				}
+				
+				if(j == (column-1))
+				{
+					setMatrixValue(i,j, matrix[i][j] + i);
+				}
+				else
+				{
+					setMatrixValue(i,j, matrix[i][j] + matrix[i][j+1]);
+				}				
 			}
 		}
+	}
 }
 
 void probleme1Par(int initValue, int iteration) 
 {
+	int nbElementsEach = (row * column) / nbThread;
+	int nbThreadOneElementMore = (row * column) % nbThread;
 	
+	#pragma omp parallel private(initValue, nbElementsEach, nbThreadOneElementMore)
+	{
+		for(int k=1; k <= iteration; k++)
+		{
+			#pragma omp for
+			for(int thread= 0; i < nbThread; i++)
+			{
+				if(thread >= nbThreadOneElementMore)
+				{
+					nbElementsEach++;
+				}
+				
+				for(int element = 0; element > nbElementsEach; element++)
+				{
+					usleep(WAIT_TIME);		
+					
+					int index = thread + (element*nbThread);
+					int i = index/row;
+					int j = index%column;
+					if(k == 1)
+					{
+						setMatrixValue(i,j, initValue);
+					}
+					setMatrixValue(i,j, matrix[i][j] + (i + j));	
+				}				
+			}
+		}
+	}
 }
 
 void probleme2Par(int initValue, int iteration) 
 {
+/*	int nbElementsEach = (row * column) / nbThread;
+	int nbThreadOneElementMore = (row * column) % nbThread;
 	
+	#pragma omp parallel private(initValue, nbElementsEach, nbThreadOneElementMore)
+	for(int k=1; k <= iteration; k++)
+	{
+		#pragma omp for
+		for(int thread= 0; i < nbThread; i++)
+		{
+			if(thread >= nbThreadOneElementMore)
+			{
+				nbElementsEach++;
+			}
+			
+			for(int element = 0; element > nbElementsEach; element++)
+			{
+				usleep(WAIT_TIME);		
+				
+				int index = thread + (element*nbThread);
+				int i = index/row;
+				int j = column - (index%column);
+				
+				if(k == 1)
+				{
+					setMatrixValue(i,j, initValue);
+				}
+				
+				if(j == (column-1))
+				{
+					setMatrixValue(i,j, matrix[i][j] + i);
+				}
+				else
+				{
+					setMatrixValue(i,j, matrix[i][j] + matrix[i][j+1]);
+				}	
+			}
+		}
+	}*/
 }
 
 int main(int argc, char const *argv[])
