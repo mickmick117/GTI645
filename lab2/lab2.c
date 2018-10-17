@@ -96,13 +96,11 @@ void probleme1Par(int initValue, int iteration)
 	int nbThreadOneElementMore = (row * column) % nbThread;
 	printf("\n %d \n",nbThreadOneElementMore);
 	initMatrixValues(initValue);
-	//printf("1 \n");
-	#pragma omp parallel private(nbElementsEach, nbThreadOneElementMore)
+
+	for(int k=1; k <= iteration; k++)
 	{
-		//printf("2 \n");
-		for(int k=1; k <= iteration; k++)
+		#pragma omp parallel private(nbElementsEach, nbThreadOneElementMore)
 		{
-		//	printf("3 \n");
 			#pragma omp for
 			for(int thread= 0; thread < nbThread; thread++)
 			{
