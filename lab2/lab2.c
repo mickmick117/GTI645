@@ -98,10 +98,10 @@ void probleme1Par(int initValue, int iteration)
 	initMatrixValues(initValue);
 	int thread, element, index;
 	
-	for(int k=1; k <= iteration; k++)
+	#pragma omp parallel private(thread, element, index, nbElementsEach, nbThreadOneElementMore)
 	{
-		#pragma omp parallel private(thread, element, index, nbElementsEach, nbThreadOneElementMore)
-		{
+		for(int k=1; k <= iteration; k++)
+		{		
 			#pragma omp for
 			for(thread= 0; thread < nbThread; thread++)
 			{
