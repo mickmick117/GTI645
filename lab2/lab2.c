@@ -108,8 +108,7 @@ void probleme1Par(int initValue, int iteration)
 			//	printf("4 \n");
 				if(thread <= nbThreadOneElementMore)
 				{
-					nbElementsEach++;
-					printf("%d, \n",nbElementsEach);
+					nbElementsEach = nbElementsEach+1;
 				}
 				
 				for(int element = 0; element < nbElementsEach; element++)
