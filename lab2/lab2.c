@@ -92,39 +92,34 @@ void probleme2Seq(int initValue, int iteration)
 
 void probleme1Par(int initValue, int iteration) 
 {
-	int nbElementsEach = (row * column) / nbThread;
-	int nbThreadOneElementMore = (row * column) % nbThread;
-	printf("\n %d \n",nbThreadOneElementMore);
 	initMatrixValues(initValue);
-	int thread, element, index;
 	
-	#pragma omp parallel private(thread, element, index, nbElementsEach, nbThreadOneElementMore)
-	{
-		for(int k=1; k <= iteration; k++)
-		{		
-			#pragma omp for
-			for(thread= 0; thread < nbThread; thread++)
+	
+	for(int k=1; k <= iteration; k++)
+	{		
+		#pragma omp parallel for
+		for(int thread= 0; thread < nbThread; thread++)
+		{
+			int nbElementsEach = (row * column) / nbThread;
+			int nbThreadOneElementMore = (row * column) % nbThread;
+			
+			if(thread < nbThreadOneElementMore)
 			{
-			//	printf("4 \n");
-				if(thread < nbThreadOneElementMore)
-				{
-					nbElementsEach++;
-				}
-				
-				for(element = 0; element < nbElementsEach; element++)
-				{
-				//	printf("5 \n");
-					usleep(WAIT_TIME);		
-					
-					index = thread + (element*nbThread);
-					printf("%d,",index);
-					printf("\n");
-					int i = index/row;
-					int j = index%column;
-					
-					setMatrixValue(i,j, matrix[i][j] + (i + j));	
-				}				
+				nbElementsEach++;
 			}
+			
+			for(int element = 0; element < nbElementsEach; element++)
+			{
+				usleep(WAIT_TIME);		
+				
+				int index = thread + (element*nbThread);
+				printf("%d,",index);
+				printf("\n");
+				int i = index/row;
+				int j = index%column;
+				
+				setMatrixValue(i,j, matrix[i][j] + (i + j));	
+			}				
 		}
 	}
 }
