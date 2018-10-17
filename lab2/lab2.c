@@ -89,7 +89,7 @@ void probleme1Par(int initValue, int iteration)
 		for(int k=1; k <= iteration; k++)
 		{
 			#pragma omp for
-			for(int thread= 0; i < nbThread; i++)
+			for(int thread= 0; thread < nbThread; i++)
 			{
 				if(thread >= nbThreadOneElementMore)
 				{
