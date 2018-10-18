@@ -203,8 +203,8 @@ int main(int argc, char const *argv[])
     printf("\nDurée d'exécution séquentiel: %f seconde(s)", tempExecutionSequentiel);
     printf("\nDurée d'exécution parallèle: %f seconde(s)", tempExecutionParallele);
     printf("\nNombre de thread: %d", omp_get_max_threads());
-    printf("\nAccélération: %f", tempExecutionSequentiel - tempExecutionParallele); // TODO mettre un beeau calcule pour donner la reponse 
-    printf("\nEfficacité: %f\n", tempExecutionSequentiel/tempExecutionParallele); // TODO mettre un beeau calcule pour donner la reponse
+    printf("\nAccélération: %f", tempExecutionSequentiel/tempExecutionParallele); // TODO mettre un beeau calcule pour donner la reponse 
+    printf("\nEfficacité: %f\n", (tempExecutionSequentiel/tempExecutionParallele)/omp_get_max_threads()); // TODO mettre un beeau calcule pour donner la reponse
 
     return 0;
 }
