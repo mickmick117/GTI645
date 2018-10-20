@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 	gettimeofday (&tp, NULL); // Début du chronomètre
 	timeStart = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6; 
 	
-	DiffusionParallele();
+	DiffusionParallele(&argc, &argv);
 	
 	gettimeofday (&tp, NULL); // Fin du chronomètre
 	timeEnd = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6;
