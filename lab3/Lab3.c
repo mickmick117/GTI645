@@ -7,6 +7,7 @@
 //#include <unistd.h>
 
 #define WAIT_TIME 5
+const int principalThread = 0;
 
 void initMatrixValues(int row, int column, int matrix[][column]);
 void printMatrix(int row, int column, int matrix[][column]);
@@ -28,33 +29,43 @@ int main(int argc, char* argv[])
 	double timeStart, timeEnd, tempExecutionParallele, tempExecutionSequentiel;
 	struct timeval tp; 	
 	
-	////////////////////////////////////////////////////////////////////////////////////
-	
-	// code mpi
-	gettimeofday (&tp, NULL); // Début du chronomètre
-	timeStart = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6; 
+	MPI_Init(&argc, &argv);
+
+	int rank;
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	int world_size;
+	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+		
+	if(rank == principalThread) 
+	{
+		gettimeofday (&tp, NULL); // Début du chronomètre parallèle
+		timeStart = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6; 
+	}
 	
 	DiffusionParallele(&argc, &argv);
 	
-	gettimeofday (&tp, NULL); // Fin du chronomètre
-	timeEnd = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6;
-	tempExecutionParallele = timeEnd - timeStart; //Temps d'exécution en secondes
+	if(rank == principalThread) 
+	{
+		gettimeofday (&tp, NULL); // Fin du chronomètre parallèle
+		timeEnd = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6;
+		tempExecutionParallele = timeEnd - timeStart; //Temps d'exécution en secondes
+		
+		// code sequentielle
+		gettimeofday (&tp, NULL); // Début du chronomètre séquentiel
+		timeStart = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6; 
+		
+		DiffusionSequentiel();
+		
+		gettimeofday (&tp, NULL); // Fin du chronomètre séquentiel
+		timeEnd = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6;
+		tempExecutionSequentiel = timeEnd - timeStart; //Temps d'exécution en secondes		
+		
+		//print stats	
+		printf("\nDurée d'exécution séquentiel: %f seconde(s)", tempExecutionSequentiel);
+		printf("\nDurée d'exécution parallèle: %f seconde(s)", tempExecutionParallele);
+	}
 	
-	// code sequentielle
-	gettimeofday (&tp, NULL); // Début du chronomètre
-	timeStart = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6; 
-	
-	DiffusionSequentiel();
-	
-	gettimeofday (&tp, NULL); // Fin du chronomètre
-	timeEnd = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6;
-	tempExecutionSequentiel = timeEnd - timeStart; //Temps d'exécution en secondes	
-	////////////////////////////////////////////////////////////////////////////////////	
-	
-	//print stats	
-	printf("\nDurée d'exécution séquentiel: %f seconde(s)", tempExecutionSequentiel);
-    printf("\nDurée d'exécution parallèle: %f seconde(s)", tempExecutionParallele);
-
+	MPI_Finalize();
 	return 0;
 }
 
@@ -84,15 +95,7 @@ void printMatrix(int row, int column, int matrix[][column])
 
 void DiffusionParallele(int argc, char* argv[])
 {
-	MPI_Init(&argc, &argv);
-
-	int rank;
-	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-	int world_size;
-	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
-	usleep(WAIT_TIME);
 	
-	MPI_Finalize();
 }
 
 void DiffusionSequentiel()
