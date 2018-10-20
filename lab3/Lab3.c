@@ -8,9 +8,9 @@
 
 #define WAIT_TIME 5
 
-void initMatrixValues(int row, int column, matrix[][column]);
-void printMatrix(int row, int column, matrix[][column]);
-void DiffusionParallele();
+void initMatrixValues(int row, int column, int matrix[][column]);
+void printMatrix(int row, int column, int matrix[][column]);
+void DiffusionParallele(int argc, char* argv[]);
 void DiffusionSequentiel();
 
 int main(int argc, char* argv[])
@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 	
 	gettimeofday (&tp, NULL); // Fin du chronomètre
 	timeEnd = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6;
-	tempExecutionParallele = timeEnd – timeStart; //Temps d'exécution en secondes
+	tempExecutionParallele = timeEnd - timeStart; //Temps d'exécution en secondes
 	
 	// code sequentielle
 	gettimeofday (&tp, NULL); // Début du chronomètre
@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 	
 	gettimeofday (&tp, NULL); // Fin du chronomètre
 	timeEnd = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6;
-	tempExecutionSequentiel = timeEnd – timeStart; //Temps d'exécution en secondes	
+	tempExecutionSequentiel = timeEnd - timeStart; //Temps d'exécution en secondes	
 	////////////////////////////////////////////////////////////////////////////////////	
 	
 	//print stats	
@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
 }
 
 
-void initMatrixValues(int row, int column, matrix[][column])
+void initMatrixValues(int row, int column, int matrix[][column])
 {
 	for (int i = 0; i < row; i++)
 	{
@@ -70,7 +70,7 @@ void initMatrixValues(int row, int column, matrix[][column])
 	}	
 }
 
-void printMatrix(int row, int column, matrix[][column])
+void printMatrix(int row, int column, int matrix[][column])
 {
 	for (int i = 0; i < row; i++)
 	{
@@ -82,7 +82,7 @@ void printMatrix(int row, int column, matrix[][column])
 	}
 }
 
-void DiffusionParallele()
+void DiffusionParallele(int argc, char* argv[])
 {
 	MPI_Init(&argc, &argv);
 
