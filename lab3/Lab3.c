@@ -30,10 +30,11 @@ int main(int argc, char* argv[])
 	double timeStart, timeEnd, tempExecutionParallele, tempExecutionSequentiel;
 	struct timeval tp;
 	
-	double* matrix = malloc (nbLignes*sizeof(*matrix));
+	double **matrix = (double **) malloc (nbLignes*sizeof(double*));
+	
 	for(int i =0; i < nbLignes; i++)
 	{
-		matrix[i] = malloc(nbColonnes*sizeof(matrix[i]);
+		matrix[i] = (double *) malloc(nbColonnes*sizeof(double);
 	}
 	//double matrix[nbLignes][nbColonnes];
 	
