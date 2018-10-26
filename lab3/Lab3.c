@@ -9,10 +9,16 @@
 #define WAIT_TIME 5
 const int principalThread = 0;
 
+int nbLignes;
+int nbColonnes;
+int nbPasDeTemps;
+int tempsDiscretise;
+int hauteur;
+
 void initMatrixValues(int row, int column, double **matrix);
 void printMatrix(int row, int column, double **matrix);
 void DiffusionParallele(int rank);
-void DiffusionSequentiel();
+void DiffusionSequentiel(int row, int column, double **matrix);
 
 
 int main(int argc, char* argv[])
@@ -22,11 +28,11 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 	
-	int nbLignes = atoi(argv[1]);
-	int nbColonnes = atoi(argv[2]);
-	int nbPasDeTemps = atoi(argv[3]);
-	int tempsDiscretise = atoi(argv[4]);
-	int tailleCoteSubdivision = atoi(argv[5]);
+	nbLignes = atoi(argv[1]);
+	nbColonnes = atoi(argv[2]);
+	nbPasDeTemps = atoi(argv[3]);
+	tempsDiscretise = atoi(argv[4]);
+	hauteur = atoi(argv[5]);
 	double timeStart, timeEnd, tempExecutionParallele, tempExecutionSequentiel;
 	struct timeval tp;
 	
@@ -46,6 +52,8 @@ int main(int argc, char* argv[])
 	
 	//initialisation de ma la matrice
 	initMatrixValues(nbLignes, nbColonnes, matrix);
+	printf("MATRICE INITIALE: \n\n");
+	printMatrix(nbLignes, nbColonnes, matrix);
 		
 	if(rank == principalThread) 
 	{
@@ -72,6 +80,7 @@ int main(int argc, char* argv[])
 		tempExecutionSequentiel = timeEnd - timeStart; //Temps d'exécution en secondes		
 		
 		//print stats
+		printf("MATRICE FINALE: \n\n");
 		printMatrix(nbLignes, nbColonnes, matrix);
 		printf("\nDurée d'exécution séquentiel: %f seconde(s)", tempExecutionSequentiel);
 		printf("\nDurée d'exécution parallèle: %f seconde(s)", tempExecutionParallele);
@@ -110,8 +119,23 @@ void DiffusionParallele(int rank)
 	
 }
 
-void DiffusionSequentiel()
+void DiffusionSequentiel(int row, int column, double **matrix)
 {
-	usleep(WAIT_TIME);
+	for(int k = 0; k < nbPasDeTemps; k++)
+	{
+		for (int i = 1; i < row-1; i++)
+		{
+			for (int j = 1; j < column-1; j++)
+			{
+				
+				U(i,j,k+1)=(1-4 td/h2)xU(i,j,k)+(td/h2)x[U(i-1,j,k)+U(i+1,j,k)+U(i,j-1,k)+U(i,j+1,k)]
+
+				usleep(WAIT_TIME);
+				matrix[i][j] = (1-4 * tempsDiscretise/(hauteur*hauteur))
+								* matrix[i][j] + (tempsDiscretise/(hauteur*hauteur)) 
+								* (matrix[i-1][j] + matrix[i+1][j] + matrix[i][j-1] + matrix[i][j+1]);
+			}
+		}
+	}	
 }
 
