@@ -12,8 +12,8 @@ const int principalThread = 0;
 int nbLignes;
 int nbColonnes;
 int nbPasDeTemps;
-int tempsDiscretise;
-int hauteur;
+double tempsDiscretise;
+double hauteur;
 
 void initMatrixValues(int row, int column, double **matrix);
 void printMatrix(int row, int column, double **matrix);
