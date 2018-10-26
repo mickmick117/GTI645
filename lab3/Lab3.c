@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
 		tempExecutionSequentiel = timeEnd - timeStart; //Temps d'exécution en secondes		
 		
 		//print stats
-		printMatrix();
+		printMatrix(nbLignes, nbColonnes, matrix);
 		printf("\nDurée d'exécution séquentiel: %f seconde(s)", tempExecutionSequentiel);
 		printf("\nDurée d'exécution parallèle: %f seconde(s)", tempExecutionParallele);
 	}
