@@ -11,7 +11,7 @@ const int principalThread = 0;
 
 void initMatrixValues(int row, int column, int matrix[][column]);
 void printMatrix(int row, int column, int matrix[][column]);
-void DiffusionParallele(int argc, char* argv[]);
+void DiffusionParallele(int rank);
 void DiffusionSequentiel();
 
 int main(int argc, char* argv[])
@@ -27,7 +27,8 @@ int main(int argc, char* argv[])
 	int tempsDiscretise = atoi(argv[4]);
 	int tailleCoteSubdivision = atoi(argv[5]);
 	double timeStart, timeEnd, tempExecutionParallele, tempExecutionSequentiel;
-	struct timeval tp; 	
+	struct timeval tp;
+	double matrix[nbLignes][nbColonnes];
 	
 	MPI_Init(&argc, &argv);
 
@@ -35,6 +36,9 @@ int main(int argc, char* argv[])
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	int world_size;
 	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+	
+	//initialisation de ma la matrice
+	initMatrixValues(nbLignes, nbColonnes, matrix);
 		
 	if(rank == principalThread) 
 	{
@@ -42,7 +46,7 @@ int main(int argc, char* argv[])
 		timeStart = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6; 
 	}
 	
-	DiffusionParallele(&argc, &argv);
+	DiffusionParallele(rank);
 	
 	if(rank == principalThread) 
 	{
@@ -60,7 +64,8 @@ int main(int argc, char* argv[])
 		timeEnd = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6;
 		tempExecutionSequentiel = timeEnd - timeStart; //Temps d'exécution en secondes		
 		
-		//print stats	
+		//print stats
+		printMatrix();
 		printf("\nDurée d'exécution séquentiel: %f seconde(s)", tempExecutionSequentiel);
 		printf("\nDurée d'exécution parallèle: %f seconde(s)", tempExecutionParallele);
 	}
@@ -93,7 +98,7 @@ void printMatrix(int row, int column, int matrix[][column])
 	}
 }
 
-void DiffusionParallele(int argc, char* argv[])
+void DiffusionParallele(int rank)
 {
 	
 }
