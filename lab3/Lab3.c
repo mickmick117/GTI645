@@ -52,11 +52,12 @@ int main(int argc, char* argv[])
 	
 	//initialisation de ma la matrice
 	initMatrixValues(nbLignes, nbColonnes, matrix);
-	printf("MATRICE INITIALE: \n\n");
-	printMatrix(nbLignes, nbColonnes, matrix);
-		
+			
 	if(rank == principalThread) 
 	{
+		printf("MATRICE INITIALE: \n\n");
+		printMatrix(nbLignes, nbColonnes, matrix);
+		
 		gettimeofday (&tp, NULL); // Début du chronomètre parallèle
 		timeStart = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6; 
 	}
