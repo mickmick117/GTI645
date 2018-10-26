@@ -36,7 +36,12 @@ int main(int argc, char* argv[])
 	{
 		matrix[i] = (double *) malloc(nbColonnes*sizeof(double));
 	}
-	//double matrix[nbLignes][nbColonnes];
+	
+	printf("%d,",nbLignes);
+	printf("%d,",nbColonnes);
+	printMatrix(nbLignes, nbColonnes, matrix);
+	printf("\n");
+	printf("\n");
 	
 	MPI_Init(&argc, &argv);
 
