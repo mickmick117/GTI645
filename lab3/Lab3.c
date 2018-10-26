@@ -31,8 +31,8 @@ int main(int argc, char* argv[])
 	nbLignes = atoi(argv[1]);
 	nbColonnes = atoi(argv[2]);
 	nbPasDeTemps = atoi(argv[3]);
-	tempsDiscretise = atoi(argv[4]);
-	hauteur = atoi(argv[5]);
+	tempsDiscretise = atof(argv[4]);
+	hauteur = atof(argv[5]);
 	double timeStart, timeEnd, tempExecutionParallele, tempExecutionSequentiel;
 	struct timeval tp;
 	
