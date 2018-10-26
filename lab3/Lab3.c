@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 		gettimeofday (&tp, NULL); // Début du chronomètre séquentiel
 		timeStart = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6; 
 		
-		DiffusionSequentiel();
+		DiffusionSequentiel(nbLignes, nbColonnes, matrix);
 		
 		gettimeofday (&tp, NULL); // Fin du chronomètre séquentiel
 		timeEnd = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6;
@@ -127,9 +127,6 @@ void DiffusionSequentiel(int row, int column, double **matrix)
 		{
 			for (int j = 1; j < column-1; j++)
 			{
-				
-				U(i,j,k+1)=(1-4 td/h2)xU(i,j,k)+(td/h2)x[U(i-1,j,k)+U(i+1,j,k)+U(i,j-1,k)+U(i,j+1,k)]
-
 				usleep(WAIT_TIME);
 				matrix[i][j] = (1-4 * tempsDiscretise/(hauteur*hauteur))
 								* matrix[i][j] + (tempsDiscretise/(hauteur*hauteur)) 
