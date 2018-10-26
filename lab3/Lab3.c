@@ -88,7 +88,7 @@ void initMatrixValues(int row, int column, double **matrix)
 	{
 		for (int j = 0; j < column; j++)
 		{
-			matrix[i][j] = i*10 + j//i * (column-i-1) * (2.0*i/column) * j * (row-j-1) * (1.0*j/row);
+			matrix[i][j] = i*10 + j;//i * (column-i-1) * (2.0*i/column) * j * (row-j-1) * (1.0*j/row);
 		}
 	}	
 }
