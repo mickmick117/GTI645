@@ -37,12 +37,6 @@ int main(int argc, char* argv[])
 		matrix[i] = (double *) malloc(nbColonnes*sizeof(double));
 	}
 	
-	printf("%d,",nbLignes);
-	printf("%d,",nbColonnes);
-	printMatrix(nbLignes, nbColonnes, matrix);
-	printf("\n");
-	printf("\n");
-	
 	MPI_Init(&argc, &argv);
 
 	int rank;
@@ -94,7 +88,7 @@ void initMatrixValues(int row, int column, double **matrix)
 	{
 		for (int j = 0; j < column; j++)
 		{
-			matrix[i][j] = i * (column-i-1) * (2.0*i/column) * j * (row-j-1) * (1.0*j/row);
+			matrix[i][j] = i*10 + j//i * (column-i-1) * (2.0*i/column) * j * (row-j-1) * (1.0*j/row);
 		}
 	}	
 }
