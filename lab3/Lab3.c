@@ -9,8 +9,8 @@
 #define WAIT_TIME 5
 const int principalThread = 0;
 
-void initMatrixValues(int row, int column, int matrix[][column]);
-void printMatrix(int row, int column, int matrix[][column]);
+void initMatrixValues(int row, int column, double matrix[][column]);
+void printMatrix(int row, int column, double matrix[][column]);
 void DiffusionParallele(int rank);
 void DiffusionSequentiel();
 
@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
 }
 
 
-void initMatrixValues(int row, int column, int matrix[][column])
+void initMatrixValues(int row, int column, double matrix[][column])
 {
 	for (int i = 0; i < row; i++)
 	{
@@ -86,7 +86,7 @@ void initMatrixValues(int row, int column, int matrix[][column])
 	}	
 }
 
-void printMatrix(int row, int column, int matrix[][column])
+void printMatrix(int row, int column, double matrix[][column])
 {
 	for (int i = 0; i < row; i++)
 	{
