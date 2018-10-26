@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 			
 	if(rank == principalThread) 
 	{
-		printf("MATRICE INITIALE: \n\n");
+		printf("\nMATRICE INITIALE: \n\n");
 		printMatrix(nbLignes, nbColonnes, matrix);
 		
 		gettimeofday (&tp, NULL); // Début du chronomètre parallèle
@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
 		printf("MATRICE FINALE: \n\n");
 		printMatrix(nbLignes, nbColonnes, matrix);
 		printf("\nDurée d'exécution séquentiel: %f seconde(s)", tempExecutionSequentiel);
-		printf("\nDurée d'exécution parallèle: %f seconde(s)", tempExecutionParallele);
+		printf("\nDurée d'exécution parallèle: %f seconde(s) \n\n", tempExecutionParallele);
 	}
 	
 	MPI_Finalize();
