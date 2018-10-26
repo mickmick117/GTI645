@@ -9,10 +9,11 @@
 #define WAIT_TIME 5
 const int principalThread = 0;
 
-void initMatrixValues(int row, int column, double matrix[][column]);
-void printMatrix(int row, int column, double matrix[][column]);
+void initMatrixValues(int row, int column, double **matrix);
+void printMatrix(int row, int column, double **matrix);
 void DiffusionParallele(int rank);
 void DiffusionSequentiel();
+
 
 int main(int argc, char* argv[])
 {
@@ -28,7 +29,13 @@ int main(int argc, char* argv[])
 	int tailleCoteSubdivision = atoi(argv[5]);
 	double timeStart, timeEnd, tempExecutionParallele, tempExecutionSequentiel;
 	struct timeval tp;
-	double matrix[nbLignes][nbColonnes];
+	
+	double* matrix = malloc (nbLignes*sizeof(*matrix));
+	for(int i =0; i < nbLignes; i++)
+	{
+		matrix[i] = malloc(nbColonnes*sizeof(matrix[i]);
+	}
+	//double matrix[nbLignes][nbColonnes];
 	
 	MPI_Init(&argc, &argv);
 
@@ -75,7 +82,7 @@ int main(int argc, char* argv[])
 }
 
 
-void initMatrixValues(int row, int column, double matrix[][column])
+void initMatrixValues(int row, int column, double **matrix)
 {
 	for (int i = 0; i < row; i++)
 	{
@@ -86,7 +93,7 @@ void initMatrixValues(int row, int column, double matrix[][column])
 	}	
 }
 
-void printMatrix(int row, int column, double matrix[][column])
+void printMatrix(int row, int column, double **matrix)
 {
 	for (int i = 0; i < row; i++)
 	{
