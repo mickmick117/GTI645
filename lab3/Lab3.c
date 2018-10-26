@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <sys/time.h>
-//#include <time.h>
+//#include <sys/time.h>
+#include <time.h>
 //#include <unistd.h>
 
 #define WAIT_TIME 5
@@ -92,7 +92,7 @@ void printMatrix(int row, int column, double matrix[][column])
 	{
 		for (int j = 0; j < column; j++)
 		{
-			printf("%d,",matrix[i][j]);
+			printf("%f,",matrix[i][j]);
 		}
 		printf("\n");
 	}
