@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
 		gettimeofday (&tp, NULL); // Début du chronomètre séquentiel
 		timeStart = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6; 
 		
-		DiffusionSequentiel(nbLignes, nbColonnes, matrix);
+		DiffusionParallele(nbLignes, nbColonnes, matrix, 1);
 		
 		gettimeofday (&tp, NULL); // Fin du chronomètre séquentiel
 		timeEnd = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6;
