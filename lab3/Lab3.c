@@ -129,9 +129,9 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 			int maxVal = y - (column - 1);
 			for (int x = MAX(1, maxVal); x <= MIN(y, row); x++)
 			{
-				int yy = y-x+1;
+				int yy = (y-x)+1;
 				usleep(WAIT_TIME);
-				matrix[x][y-x] = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
+				matrix[x][yy] = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
 					* matrix[x][yy] + (tempsDiscretise / (hauteur*hauteur))
 					* (matrix[x - 1][yy] + matrix[x + 1][yy] + matrix[x][yy - 1] + matrix[x][yy + 1]);
 			}
