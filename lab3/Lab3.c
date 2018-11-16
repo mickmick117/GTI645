@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
 		gettimeofday (&tp, NULL); // Début du chronomètre séquentiel
 		timeStart = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6; 
 		
-		DiffusionParallele(nbLignes, nbColonnes, matrix, 1);
+		DiffusionParallele(nbLignes, nbColonnes, matrix);
 		
 		gettimeofday (&tp, NULL); // Fin du chronomètre séquentiel
 		timeEnd = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6;
@@ -126,12 +126,13 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 	{		
 		for (int y = 1; y <= (column + row) - 1; y++)
 		{
-			for (int x = MAX(1,(y-(column-1))); x < MIN(y, (row-1)); x++)
+			for (int x = max(1, (y - (column - 1))); x <= min(y, row); x++)
 			{
+				int yy = y-x+1;
 				usleep(WAIT_TIME);
 				matrix[x][y-x] = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
-					* matrix[x][y-x] + (tempsDiscretise / (hauteur*hauteur))
-					* (matrix[x - 1][y-x] + matrix[x + 1][y-x] + matrix[x][y-x - 1] + matrix[x][y-x + 1]);
+					* matrix[x][yy] + (tempsDiscretise / (hauteur*hauteur))
+					* (matrix[x - 1][yy] + matrix[x + 1][yy] + matrix[x][yy - 1] + matrix[x][yy + 1]);
 			}
 		}
 	}
