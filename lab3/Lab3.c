@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
 		timeStart = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6; 
 	}
 	
-	DiffusionParallele(rank);
+	//DiffusionParallele(nbLignes, nbColonnes, matrix, rank);
 	
 	if(rank == principalThread) 
 	{
@@ -114,9 +114,24 @@ void printMatrix(int row, int column, double **matrix)
 	}
 }
 
-void DiffusionParallele(int rank)
+void DiffusionParallele(int row, int column, double **matrix, int rank)
 {
-	
+	column -= 2;
+	row -= 2;
+
+	for (int k = 0; k < nbPasDeTemps; k++)
+	{		
+		for (int y = 1; y <= (column + row) - 1; y++)
+		{
+			for (int x = max(1,y-(column-1)); x < min(y, row-1); x++)
+			{
+				usleep(WAIT_TIME);
+				matrix[x][y-x] = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
+					* matrix[x][y-x] + (tempsDiscretise / (hauteur*hauteur))
+					* (matrix[x - 1][y-x] + matrix[x + 1][y-x] + matrix[x][y-x - 1] + matrix[x][y-x + 1]);
+			}
+		}
+	}
 }
 
 void DiffusionSequentiel(int row, int column, double **matrix)
@@ -128,7 +143,7 @@ void DiffusionSequentiel(int row, int column, double **matrix)
 			for (int j = 1; j < column-1; j++)
 			{
 				usleep(WAIT_TIME);
-				matrix[i][j] = (1-4 * tempsDiscretise/(hauteur*hauteur))
+				matrix[i][j] = (1- 4 * tempsDiscretise/(hauteur*hauteur))
 								* matrix[i][j] + (tempsDiscretise/(hauteur*hauteur)) 
 								* (matrix[i-1][j] + matrix[i+1][j] + matrix[i][j-1] + matrix[i][j+1]);
 			}
