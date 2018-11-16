@@ -126,7 +126,8 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 	{		
 		for (int y = 1; y <= (column + row) - 1; y++)
 		{
-			for (int x = MAX(1, (y - (column - 1))); x <= MIN(y, row); x++)
+			int maxVal = y - (column - 1);
+			for (int x = MAX(1, maxVal); x <= MIN(y, row); x++)
 			{
 				int yy = y-x+1;
 				usleep(WAIT_TIME);
