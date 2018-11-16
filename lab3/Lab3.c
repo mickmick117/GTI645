@@ -6,6 +6,9 @@
 #include <unistd.h>
 
 #define WAIT_TIME 5
+#define MAX(a,b) ((a) > (b) ? a : b)
+#define MIN(a,b) ((a) < (b) ? a : b)
+
 const int principalThread = 0;
 
 int nbLignes;
@@ -16,7 +19,7 @@ double hauteur;
 
 void initMatrixValues(int row, int column, double **matrix);
 void printMatrix(int row, int column, double **matrix);
-void DiffusionParallele(int rank);
+void DiffusionParallele(int row, int column, double **matrix, int rank);
 void DiffusionSequentiel(int row, int column, double **matrix);
 
 
@@ -123,7 +126,7 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 	{		
 		for (int y = 1; y <= (column + row) - 1; y++)
 		{
-			for (int x = max(1,y-(column-1)); x < min(y, row-1); x++)
+			for (int x = MAX(1,(y-(column-1))); x < MIN(y, (row-1)); x++)
 			{
 				usleep(WAIT_TIME);
 				matrix[x][y-x] = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
