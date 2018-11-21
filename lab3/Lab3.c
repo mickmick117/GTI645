@@ -91,7 +91,10 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		ThreadCalculation();
+		if(rank == 1)
+		{
+			ThreadCalculation();
+		}
 	}
 	
 	MPI_Finalize();
