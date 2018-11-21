@@ -20,6 +20,7 @@ double hauteur;
 void initMatrixValues(int row, int column, double **matrix);
 void printMatrix(int row, int column, double **matrix);
 void DiffusionParallele(int row, int column, double **matrix, int rank);
+void ThreadCalculation();
 void DiffusionSequentiel(int row, int column, double **matrix);
 
 
@@ -83,14 +84,14 @@ int main(int argc, char* argv[])
 		tempExecutionSequentiel = timeEnd - timeStart; //Temps d'exécution en secondes		
 		
 		//print stats
-		printf("MATRICE FINALE: \n\n");
+		/*printf("MATRICE FINALE: \n\n");
 		printMatrix(nbLignes, nbColonnes, matrix);
 		printf("\nDurée d'exécution séquentiel: %f seconde(s)", tempExecutionSequentiel);
-		printf("\nDurée d'exécution parallèle: %f seconde(s) \n\n", tempExecutionParallele);
+		printf("\nDurée d'exécution parallèle: %f seconde(s) \n\n", tempExecutionParallele);*/
 	}
 	else
 	{
-		
+		ThreadCalculation
 	}
 	
 	MPI_Finalize();
