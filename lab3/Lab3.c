@@ -174,6 +174,7 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 				//printf("%f,", returnValues[0]);
 				//printf("%f \n \n", returnValues[1]);
 				matrix[(int)returnValues[0]][(int)returnValues[1]] = returnValues[2];
+				printf("%f \n", returnValues[2]);
 			}
 		}
 	}
