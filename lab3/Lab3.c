@@ -6,10 +6,12 @@
 #include <unistd.h>
 
 #define WAIT_TIME 5
+#define EXIT 9999
 #define MAX(a,b) ((a) > (b) ? a : b)
 #define MIN(a,b) ((a) < (b) ? a : b)
 
 const int principalThread = 0;
+const int valuesArraySize = 7;
 
 int nbLignes;
 int nbColonnes;
@@ -84,10 +86,10 @@ int main(int argc, char* argv[])
 		tempExecutionSequentiel = timeEnd - timeStart; //Temps d'exécution en secondes		
 		
 		//print stats
-		/*printf("MATRICE FINALE: \n\n");
+		printf("MATRICE FINALE: \n\n");
 		printMatrix(nbLignes, nbColonnes, matrix);
 		printf("\nDurée d'exécution séquentiel: %f seconde(s)", tempExecutionSequentiel);
-		printf("\nDurée d'exécution parallèle: %f seconde(s) \n\n", tempExecutionParallele);*/
+		printf("\nDurée d'exécution parallèle: %f seconde(s) \n\n", tempExecutionParallele);
 	}
 	else
 	{
@@ -127,12 +129,14 @@ void printMatrix(int row, int column, double **matrix)
 
 void DiffusionParallele(int row, int column, double **matrix, int rank)
 {
+	double values[valuesArraySize];
+	double returnValues [3];
 	int threadIndex;
 	int threadNumber = 1;
 	column -= 2;
 	row -= 2;
 
-	/*for (int k = 0; k < nbPasDeTemps; k++)
+	for (int k = 0; k < nbPasDeTemps; k++)
 	{		
 		for (int y = 1; y <= (column + row) - 1; y++)
 		{
@@ -140,32 +144,71 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 			int maxVal = y - (column - 1);
 			for (int x = MAX(1, maxVal); x <= MIN(y, row); x++)
 			{
-				threadNumber = (threadIndex - 1) % 66 + 1;				
+				threadNumber = (threadIndex - 1) % 63 + 1;				
+				threadIndex++;
 				
-				int yy = (y-x)+1;
-				usleep(WAIT_TIME);
-				matrix[x][yy] = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
+				int yy = (y-x)+1;				
+				//set values
+				values[0] = x;
+				values[1] = yy;
+				
+				values[2] = matrix[x][yy];
+				values[3] = matrix[x - 1][yy];
+				values[4] = matrix[x + 1][yy];
+				values[5] = matrix[x][yy - 1];
+				values[6] = matrix[x][yy + 1];
+				
+	
+				MPI_Send(values, valuesArraySize, MPI_DOUBLE, threadNumber, 0, MPI_COMM_WORLD);
+				/*matrix[x][yy] = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
 					* matrix[x][yy] + (tempsDiscretise / (hauteur*hauteur))
-					* (matrix[x - 1][yy] + matrix[x + 1][yy] + matrix[x][yy - 1] + matrix[x][yy + 1]);
+					* (matrix[x - 1][yy] + matrix[x + 1][yy] + matrix[x][yy - 1] + matrix[x][yy + 1]);*/
+			}
+			
+			for (int i = 0; i < (threadIndex-2); i++)
+			{
+				MPI_Recv (returnValues, 3, MPI_DOUBLE, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+				matrix[(int)returnValues[0]][(int)returnValues[1]] = returnValues[2];
 			}
 		}
-	}*/
+	}
 	
-	double n[4] = {1,2,3,16};
+	//tell the thread to end
+	values[0] = EXIT;
 	
-	MPI_Send(n, 4, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD);
+	for(int j=1; j < 64; j++)
+	{
+		MPI_Send(values, valuesArraySize, MPI_DOUBLE, j, 0, MPI_COMM_WORLD);
+	}	
 }
 
 void ThreadCalculation()
 {
-	double m[4];
-	MPI_Recv (m, 4, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	
-	for (int j = 0; j < 4; j++)
+	int loop = 1; // true
+	int returnValue;
+	double values[valuesArraySize];
+	double returnValues [3];
+
+	while(loop == 1)
+	{
+		MPI_Recv (values, valuesArraySize, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		if(values[0] != EXIT)
 		{
-			printf("%f,",m[j]);
+			usleep(WAIT_TIME);
+			returnValue = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
+						* values[2] + (tempsDiscretise / (hauteur*hauteur))
+						* (values[3] + values[4] + values[5] + values[6]);
+			// set values
+			returnValues [0] = values[0];			
+			returnValues [1] = values[1];
+			returnValues [2] = returnValue;
+			MPI_Send(returnValues, 3, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
 		}
-	//while()
+		else
+		{
+			loop = 0; // false
+		}
+	}
 }
 
 void DiffusionSequentiel(int row, int column, double **matrix)
