@@ -136,7 +136,7 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 	column -= 2;
 	row -= 2;
 
-	for (int k = 0; k < nbPasDeTemps; k++)
+	/*for (int k = 0; k < nbPasDeTemps; k++)
 	{		
 		for (int y = 1; y <= (column + row) - 1; y++)
 		{
@@ -160,9 +160,9 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 				
 	
 				MPI_Send(values, valuesArraySize, MPI_DOUBLE, threadNumber, 0, MPI_COMM_WORLD);
-				/*matrix[x][yy] = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
-					* matrix[x][yy] + (tempsDiscretise / (hauteur*hauteur))
-					* (matrix[x - 1][yy] + matrix[x + 1][yy] + matrix[x][yy - 1] + matrix[x][yy + 1]);*/
+				//matrix[x][yy] = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
+				//	* matrix[x][yy] + (tempsDiscretise / (hauteur*hauteur))
+				//	* (matrix[x - 1][yy] + matrix[x + 1][yy] + matrix[x][yy - 1] + matrix[x][yy + 1]);
 			}
 			
 			for (int i = 0; i < (threadIndex-2); i++)
@@ -171,7 +171,16 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 				matrix[(int)returnValues[0]][(int)returnValues[1]] = returnValues[2];
 			}
 		}
-	}
+	}*/
+	
+	values[0] = EXIT;
+	values[1] = 5;
+	
+	values[2] = 5;
+	values[3] = 5;
+	values[4] = 5;
+	values[5] = 5;
+	values[6] = 5;
 	
 	//tell the thread to end
 	values[0] = EXIT;
