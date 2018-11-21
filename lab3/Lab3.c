@@ -144,14 +144,14 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 			int maxVal = y - (column - 1);
 			for (int x = MAX(1, maxVal); x <= MIN(y, row); x++)
 			{
-				//printf("threadIndex: %d,",threadIndex);
-				//printf("\n");
+				printf("threadIndex: %d,",threadIndex);
+				printf("\n");
 				
 				threadNumber = (threadIndex - 1) % 63 + 1;				
 				threadIndex++;
 				
-				//printf("threadNumber: %d,",threadNumber);
-				//printf("\n");
+				printf("threadNumber: %d,",threadNumber);
+				printf("\n");
 				
 				int yy = (y-x)+1;				
 				//set values
