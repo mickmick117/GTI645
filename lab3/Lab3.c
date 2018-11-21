@@ -21,7 +21,7 @@ double hauteur;
 
 void initMatrixValues(int row, int column, double **matrix);
 void printMatrix(int row, int column, double **matrix);
-void DiffusionParallele(int row, int column, double **matrix, int rank);
+void DiffusionParallele(int row, int column, double **matrix);
 void ThreadCalculation();
 void DiffusionSequentiel(int row, int column, double **matrix);
 
@@ -63,24 +63,20 @@ int main(int argc, char* argv[])
 		printf("\nMATRICE INITIALE: \n\n");
 		printMatrix(nbLignes, nbColonnes, matrix);
 		
+		//code parallèle
 		gettimeofday (&tp, NULL); // Début du chronomètre parallèle
 		timeStart = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6; 
-	}
-	
-	//DiffusionParallele(nbLignes, nbColonnes, matrix, rank);
-	
-	if(rank == principalThread) 
-	{
+		DiffusionParallele(nbLignes, nbColonnes, matrix);
 		gettimeofday (&tp, NULL); // Fin du chronomètre parallèle
 		timeEnd = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6;
 		tempExecutionParallele = timeEnd - timeStart; //Temps d'exécution en secondes
 		
 		// code sequentielle
+		initMatrixValues(nbLignes, nbColonnes, matrix);
+		
 		gettimeofday (&tp, NULL); // Début du chronomètre séquentiel
-		timeStart = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6; 
-		
-		DiffusionParallele(nbLignes, nbColonnes, matrix, 1);
-		
+		timeStart = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6; 		
+		DiffusionSequentiel(nbLignes, nbColonnes, matrix);		
 		gettimeofday (&tp, NULL); // Fin du chronomètre séquentiel
 		timeEnd = (double) (tp.tv_sec) + (double) (tp.tv_usec) / 1e6;
 		tempExecutionSequentiel = timeEnd - timeStart; //Temps d'exécution en secondes		
@@ -124,7 +120,7 @@ void printMatrix(int row, int column, double **matrix)
 	}
 }
 
-void DiffusionParallele(int row, int column, double **matrix, int rank)
+void DiffusionParallele(int row, int column, double **matrix)
 {
 	double values[valuesArraySize];
 	double returnValues [3];
@@ -201,12 +197,6 @@ void ThreadCalculation()
 		
 		if(values[0] != EXIT)
 		{
-			/*printf("%f,",values[2]);
-			printf("%f,",values[3]);
-			printf("%f,",values[4]);
-			printf("%f,",values[5]);
-			printf("%f \n \n",values[6]);
-			*/
 			usleep(WAIT_TIME);
 			returnValue = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
 						* values[2] + (tempsDiscretise / (hauteur*hauteur))
