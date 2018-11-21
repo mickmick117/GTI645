@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		ThreadCalculation
+		ThreadCalculation();
 	}
 	
 	MPI_Finalize();
