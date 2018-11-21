@@ -147,14 +147,14 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 		}
 	}*/
 	
-	int n[4] = {1,2,3,16};
+	double n[4] = {1,2,3,16};
 	
 	MPI_Send(n, 4, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD);
 }
 
 void ThreadCalculation()
 {
-	int m[4];
+	double m[4];
 	MPI_Recv (m, 4, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	
 	for (int j = 0; j < 4; j++)
