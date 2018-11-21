@@ -175,6 +175,7 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 			
 			for (int i = 0; i < (threadIndex-2); i++)
 			{
+				printf("recv: %d %n",threadIndex);
 				MPI_Recv (returnValues, 3, MPI_DOUBLE, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				matrix[(int)returnValues[0]][(int)returnValues[1]] = returnValues[2];
 			}
@@ -217,8 +218,6 @@ void ThreadCalculation()
 			loop = 0; // false
 		}
 	}
-	
-	printf("END THREAD %n,");
 }
 
 void DiffusionSequentiel(int row, int column, double **matrix)
