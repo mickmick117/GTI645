@@ -191,7 +191,7 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 void ThreadCalculation()
 {
 	int loop = 1; // true
-	int returnValue;
+	double returnValue;
 	double values[valuesArraySize];
 	double returnValues [3];
 
@@ -201,12 +201,12 @@ void ThreadCalculation()
 		
 		if(values[0] != EXIT)
 		{
-			printf("%f,",values[2]);
+			/*printf("%f,",values[2]);
 			printf("%f,",values[3]);
 			printf("%f,",values[4]);
 			printf("%f,",values[5]);
 			printf("%f \n \n",values[6]);
-			
+			*/
 			usleep(WAIT_TIME);
 			returnValue = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
 						* values[2] + (tempsDiscretise / (hauteur*hauteur))
