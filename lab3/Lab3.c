@@ -88,6 +88,10 @@ int main(int argc, char* argv[])
 		printf("\nDurée d'exécution séquentiel: %f seconde(s)", tempExecutionSequentiel);
 		printf("\nDurée d'exécution parallèle: %f seconde(s) \n\n", tempExecutionParallele);
 	}
+	else
+	{
+		
+	}
 	
 	MPI_Finalize();
 	return 0;
@@ -119,16 +123,21 @@ void printMatrix(int row, int column, double **matrix)
 
 void DiffusionParallele(int row, int column, double **matrix, int rank)
 {
+	int threadIndex;
+	int threadNumber = 1;
 	column -= 2;
 	row -= 2;
 
-	for (int k = 0; k < nbPasDeTemps; k++)
+	/*for (int k = 0; k < nbPasDeTemps; k++)
 	{		
 		for (int y = 1; y <= (column + row) - 1; y++)
 		{
+			threadIndex = 1;
 			int maxVal = y - (column - 1);
 			for (int x = MAX(1, maxVal); x <= MIN(y, row); x++)
 			{
+				threadNumber = (threadIndex - 1) % 66 + 1;				
+				
 				int yy = (y-x)+1;
 				usleep(WAIT_TIME);
 				matrix[x][yy] = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
@@ -136,7 +145,23 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 					* (matrix[x - 1][yy] + matrix[x + 1][yy] + matrix[x][yy - 1] + matrix[x][yy + 1]);
 			}
 		}
-	}
+	}*/
+	
+	int n[4] = {1,2,3,16};
+	
+	MPI_Send(n, 4, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD)
+}
+
+void ThreadCalculation()
+{
+	int m[4];
+	MPI_Recv (m, 4, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE)
+	
+	for (int j = 0; j < 4; j++)
+		{
+			printf("%f,",m[j]);
+		}
+	//while()
 }
 
 void DiffusionSequentiel(int row, int column, double **matrix)
