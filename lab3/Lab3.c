@@ -172,8 +172,10 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 			
 			for (int i = 0; i < (threadIndex-1); i++)
 			{
-				//printf("recv: %d \n",i);
+				printf("recv: %d \n",i);
 				MPI_Recv (returnValues, 3, MPI_DOUBLE, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+				printf("%f,", returnValues[0]);
+				printf("%f \n \n", returnValues[1]);
 				matrix[(int)returnValues[0]][(int)returnValues[1]] = returnValues[2];
 			}
 		}
