@@ -174,7 +174,7 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 				//printf("%f,", returnValues[0]);
 				//printf("%f \n \n", returnValues[1]);
 				matrix[(int)returnValues[0]][(int)returnValues[1]] = returnValues[2];
-				printf("%f \n", returnValues[2]);
+				//printf("%f \n", returnValues[2]);
 			}
 		}
 	}
@@ -198,8 +198,15 @@ void ThreadCalculation()
 	while(loop == 1)
 	{
 		MPI_Recv (values, valuesArraySize, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		
 		if(values[0] != EXIT)
 		{
+			printf("%f,",values[2]);
+			printf("%f,",values[3]);
+			printf("%f,",values[4]);
+			printf("%f,",values[5]);
+			printf("%f \n \n",values[6]);
+			
 			usleep(WAIT_TIME);
 			returnValue = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
 						* values[2] + (tempsDiscretise / (hauteur*hauteur))
