@@ -93,10 +93,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		if(rank == 1)
-		{
-			ThreadCalculation();
-		}
+		ThreadCalculation();
 	}
 	
 	MPI_Finalize();
@@ -144,14 +141,14 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 			int maxVal = y - (column - 1);
 			for (int x = MAX(1, maxVal); x <= MIN(y, row); x++)
 			{
-				printf("threadIndex: %d,",threadIndex);
-				printf("\n");
+				//printf("threadIndex: %d,",threadIndex);
+				//printf("\n");
 				
 				threadNumber = (threadIndex - 1) % 63 + 1;				
 				threadIndex++;
 				
-				printf("threadNumber: %d,",threadNumber);
-				printf("\n");
+				//printf("threadNumber: %d,",threadNumber);
+				//printf("\n");
 				
 				int yy = (y-x)+1;				
 				//set values
@@ -172,10 +169,10 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 			
 			for (int i = 0; i < (threadIndex-1); i++)
 			{
-				printf("recv: %d \n",i);
+				//printf("recv: %d \n",i);
 				MPI_Recv (returnValues, 3, MPI_DOUBLE, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-				printf("%f,", returnValues[0]);
-				printf("%f \n \n", returnValues[1]);
+				//printf("%f,", returnValues[0]);
+				//printf("%f \n \n", returnValues[1]);
 				matrix[(int)returnValues[0]][(int)returnValues[1]] = returnValues[2];
 			}
 		}
