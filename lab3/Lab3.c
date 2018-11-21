@@ -11,7 +11,7 @@
 #define MIN(a,b) ((a) < (b) ? a : b)
 
 const int principalThread = 0;
-const int valuesArraySize = 7;
+const int valuesArraySize = 4;
 
 int nbLignes;
 int nbColonnes;
@@ -152,10 +152,10 @@ void DiffusionParallele(int row, int column, double **matrix)
 				values[1] = yy;
 				
 				values[2] = matrix[x][yy];
-				values[3] = matrix[x - 1][yy];
-				values[4] = matrix[x + 1][yy];
+				values[3] = (matrix[x - 1][yy] + matrix[x + 1][yy] + matrix[x][yy - 1] + matrix[x][yy + 1]);
+				/*values[4] = matrix[x + 1][yy];
 				values[5] = matrix[x][yy - 1];
-				values[6] = matrix[x][yy + 1];			
+				values[6] = matrix[x][yy + 1];*/			
 	
 				MPI_Send(values, valuesArraySize, MPI_DOUBLE, threadNumber, 0, MPI_COMM_WORLD);
 				//matrix[x][yy] = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
@@ -200,7 +200,7 @@ void ThreadCalculation()
 			usleep(WAIT_TIME);
 			returnValue = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
 						* values[2] + (tempsDiscretise / (hauteur*hauteur))
-						* (values[3] + values[4] + values[5] + values[6]);
+						*  values[3]/*(values[3] + values[4] + values[5] + values[6])*/;
 			// set values
 			returnValues [0] = values[0];			
 			returnValues [1] = values[1];
