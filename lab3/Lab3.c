@@ -193,7 +193,7 @@ void ThreadCalculation()
 		
 		if(values[0] != EXIT)
 		{
-			//usleep(WAIT_TIME);
+			usleep(WAIT_TIME);
 			returnValue = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
 						* values[2] + (tempsDiscretise / (hauteur*hauteur))
 						* (values[3] + values[4] + values[5] + values[6]);
