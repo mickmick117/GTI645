@@ -95,7 +95,7 @@ int main(int argc, char* argv[])
 	{
 		if(rank == 1)
 		{
-			//ThreadCalculation();
+			ThreadCalculation();
 		}
 	}
 	
@@ -167,17 +167,17 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 	
 				
 	
-				//MPI_Send(values, valuesArraySize, MPI_DOUBLE, threadNumber, 0, MPI_COMM_WORLD);
+				MPI_Send(values, valuesArraySize, MPI_DOUBLE, threadNumber, 0, MPI_COMM_WORLD);
 				//matrix[x][yy] = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
 				//	* matrix[x][yy] + (tempsDiscretise / (hauteur*hauteur))
 				//	* (matrix[x - 1][yy] + matrix[x + 1][yy] + matrix[x][yy - 1] + matrix[x][yy + 1]);
 			}
 			
-			/*for (int i = 0; i < (threadIndex-2); i++)
+			for (int i = 0; i < (threadIndex-2); i++)
 			{
 				MPI_Recv (returnValues, 3, MPI_DOUBLE, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				matrix[(int)returnValues[0]][(int)returnValues[1]] = returnValues[2];
-			}*/
+			}
 		}
 	}
 	
@@ -217,6 +217,8 @@ void ThreadCalculation()
 			loop = 0; // false
 		}
 	}
+	
+	printf("END THREAD %n,");
 }
 
 void DiffusionSequentiel(int row, int column, double **matrix)
