@@ -144,8 +144,14 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 			int maxVal = y - (column - 1);
 			for (int x = MAX(1, maxVal); x <= MIN(y, row); x++)
 			{
+				printf("threadIndex: %d,",threadIndex);
+				printf("\n");
+				
 				threadNumber = (threadIndex - 1) % 63 + 1;				
 				threadIndex++;
+				
+				printf("threadNumber: %d,",threadNumber);
+				printf("\n");
 				
 				int yy = (y-x)+1;				
 				//set values
@@ -159,8 +165,7 @@ void DiffusionParallele(int row, int column, double **matrix, int rank)
 				values[6] = matrix[x][yy + 1];
 				
 	
-				printf("%d,",threadNumber);
-				printf("\n");
+				
 	
 				MPI_Send(values, valuesArraySize, MPI_DOUBLE, threadNumber, 0, MPI_COMM_WORLD);
 				//matrix[x][yy] = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
