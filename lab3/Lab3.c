@@ -163,11 +163,11 @@ void DiffusionParallele(int row, int column, double **matrix)
 				//	* (matrix[x - 1][yy] + matrix[x + 1][yy] + matrix[x][yy - 1] + matrix[x][yy + 1]);
 			}
 			
-		/*	for (int i = 0; i < (threadIndex-1); i++)
+			for (int i = 0; i < (threadIndex-1); i++)
 			{
 				MPI_Recv (returnValues, 3, MPI_DOUBLE, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				matrix[(int)returnValues[0]][(int)returnValues[1]] = returnValues[2];
-			}*/
+			}
 		}
 	}
 	
@@ -193,7 +193,7 @@ void ThreadCalculation()
 		
 		if(values[0] != EXIT)
 		{
-			usleep(WAIT_TIME);
+			//usleep(WAIT_TIME);
 			returnValue = (1 - 4 * tempsDiscretise / (hauteur*hauteur))
 						* values[2] + (tempsDiscretise / (hauteur*hauteur))
 						* (values[3] + values[4] + values[5] + values[6]);
