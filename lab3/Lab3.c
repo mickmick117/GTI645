@@ -53,10 +53,7 @@ int main(int argc, char* argv[])
 
 	int rank;
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
-	
-	printf("\n worldSize: %d \n", world_size);
-	
+	MPI_Comm_size(MPI_COMM_WORLD, &world_size);	
 	
 	//initialisation de ma la matrice
 	initMatrixValues(nbLignes, nbColonnes, matrix);
