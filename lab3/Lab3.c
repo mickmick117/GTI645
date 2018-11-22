@@ -165,7 +165,7 @@ void DiffusionParallele(int row, int column, double **matrix)
 			
 			for (int i = 0; i < (threadIndex-1); i++)
 			{
-				MPI_Recv (returnValues, 3, MPI_DOUBLE, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+				MPI_Recv (returnValues, 3, MPI_DOUBLE, i+1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				matrix[(int)returnValues[0]][(int)returnValues[1]] = returnValues[2];
 			}
 		}
