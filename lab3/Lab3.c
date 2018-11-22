@@ -18,6 +18,7 @@ int nbColonnes;
 int nbPasDeTemps;
 double tempsDiscretise;
 double hauteur;
+int world_size;
 
 void initMatrixValues(int row, int column, double **matrix);
 void printMatrix(int row, int column, double **matrix);
@@ -52,8 +53,10 @@ int main(int argc, char* argv[])
 
 	int rank;
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-	int world_size;
 	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+	
+	printf("\n worldSize: %d \n", world_size);
+	
 	
 	//initialisation de ma la matrice
 	initMatrixValues(nbLignes, nbColonnes, matrix);
@@ -140,7 +143,7 @@ void DiffusionParallele(int row, int column, double **matrix)
 				//printf("threadIndex: %d,",threadIndex);
 				//printf("\n");
 				
-				threadNumber = (threadIndex - 1) % 63 + 1;				
+				threadNumber = (threadIndex - 1) % (world_size-1) + 1;				
 				threadIndex++;
 				
 				//printf("threadNumber: %d,",threadNumber);
@@ -165,7 +168,7 @@ void DiffusionParallele(int row, int column, double **matrix)
 			
 			for (int i = 0; i < (threadIndex-1); i++)
 			{
-				MPI_Recv (returnValues, 3, MPI_DOUBLE, i+1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+				MPI_Recv (returnValues, 3, MPI_DOUBLE, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				matrix[(int)returnValues[0]][(int)returnValues[1]] = returnValues[2];
 			}
 		}
@@ -174,7 +177,7 @@ void DiffusionParallele(int row, int column, double **matrix)
 	//tell the thread to end
 	values[0] = EXIT;
 	
-	for(int j=1; j < 64; j++)
+	for(int j=1; j < world_size; j++)
 	{
 		MPI_Send(values, valuesArraySize, MPI_DOUBLE, j, 0, MPI_COMM_WORLD);
 	}	
